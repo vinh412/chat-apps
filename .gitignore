@@ -1,0 +1,29 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# ui - Reactjs
+ui/node_modules
+
+# chat-api - Spring Boot
+chat-api/HELP.md
+chat-api/target/
+chat-api/!.mvn/wrapper/maven-wrapper.jar
+chat-api/!**/src/main/**/target/
+chat-api/!**/src/test/**/target/
+
+### STS ###
+chat-api/.apt_generated
+chat-api/.classpath
+chat-api/.factorypath
+chat-api/.project
+chat-api/.settings
+chat-api/.springBeans
+chat-api/.sts4-cache
+
+### IntelliJ IDEA ###
+chat-api/.idea
+chat-api/*.iws
+chat-api/*.iml
+chat-api/*.ipr
+
+### VS Code ###
+chat-api/.vscode/
