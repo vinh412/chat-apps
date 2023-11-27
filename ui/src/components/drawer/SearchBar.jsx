@@ -5,7 +5,7 @@ import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 
 function SearchBar() {
     return (
-        <Box display='flex' flexDirection='row' sx={{paddingBottom: '16px'}}>
+        <Box display='flex' flexDirection='row' sx={{p: '0px 8px 16px 0px'}}>
             <Box sx={{ p: '4px' }}>
                 <IconButton size='lg'>
                     <MenuRoundedIcon />
