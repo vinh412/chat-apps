@@ -25,5 +25,24 @@ chat-api/*.iws
 chat-api/*.iml
 chat-api/*.ipr
 
-### VS Code ###
-chat-api/.vscode/
+# chat-server Spring Boot
+chat-server/HELP.md
+chat-server/target/
+chat-server/!.mvn/wrapper/maven-wrapper.jar
+chat-server/!**/src/main/**/target/
+chat-server/!**/src/test/**/target/
+
+### STS ###
+chat-server/.apt_generated
+chat-server/.classpath
+chat-server/.factorypath
+chat-server/.project
+chat-server/.settings
+chat-server/.springBeans
+chat-server/.sts4-cache
+
+### IntelliJ IDEA ###
+chat-server/.idea
+chat-server/*.iws
+chat-server/*.iml
+chat-server/*.ipr
