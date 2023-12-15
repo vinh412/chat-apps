@@ -12,20 +12,6 @@ function ContactDrawer() {
         overflow: 'auto'
       }}>
         <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-
       </Box>
     </Box>
   )

@@ -6,21 +6,7 @@ import MessageText2 from './MessageText2'
 function Conversation() {
   return (
     <Box display='flex' flexDirection='column'>
-        <MessageText />
-        <MessageText2 />
-        <MessageText />
-        <MessageText2 />
-        <MessageText />
-        <MessageText2 />
-        <MessageText2 />
-        <MessageText />
-        <MessageText2 />
-        <MessageText />
-        <MessageText />
-        <MessageText />
-        <MessageText2 />
-        <MessageText />
-        <MessageText2 />
+        
     </Box>
   )
 }
