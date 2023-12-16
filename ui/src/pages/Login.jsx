@@ -4,10 +4,13 @@ import customTheme from '../theme/theme'
 import { CssVarsProvider } from "@mui/joy/styles";
 import { Box, Typography, Card, Container, Grid, FormControl, FormLabel, Input, Button, Link, Checkbox, Divider } from '@mui/joy'
 import GoogleIcon from './GoogleIcon';
+import { useDispatch } from 'react-redux';
+import { login } from '../features/auth/authSlice';
 
 function Login() {
     const navigate = useNavigate();
     const [error, setError] = useState();
+    const dispatch = useDispatch();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -19,7 +22,7 @@ function Login() {
         };
 
         try {
-            const res = await fetch('/api/v1/auth/login', {
+            const res = await fetch('http://localhost:8080/api/v1/auth/authenticate', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -28,13 +31,8 @@ function Login() {
             });
 
             const data = await res.json();
-            if(data.error){
-                setError(data.error);
-            }
-            if(data.user){
-                localStorage.setItem('user', JSON.stringify(data.user));
-                localStorage.setItem('shop', JSON.stringify(data.shop));
-                navigate("../");
+            if(data.token){
+                dispatch(login(data));
             }
         }catch (err) {
             console.log(err);
