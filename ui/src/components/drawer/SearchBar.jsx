@@ -49,6 +49,7 @@ function SearchBar() {
           endDecorator={<SearchRoundedIcon />}
           sx={{ p: "8px" }}
           size="lg"
+          variant="soft"
         />
       </Box>
     </Box>

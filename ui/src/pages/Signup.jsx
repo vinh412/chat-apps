@@ -4,9 +4,12 @@ import customTheme from '../theme/theme'
 import { CssVarsProvider } from "@mui/joy/styles";
 import { Box, Typography, Card, Container, Grid, FormControl, FormLabel, Input, Button, Divider } from '@mui/joy'
 import GoogleIcon from './GoogleIcon'
+import { useDispatch } from 'react-redux';
+import { signup } from '../features/auth/authSlice'
 
 function Signup() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [error, setError] = useState();
 
     const handleSubmit = async (event) => {
@@ -21,7 +24,7 @@ function Signup() {
         };
 
         try {
-            const res = await fetch('/api/v1/auth/register', {
+            const res = await fetch('http://localhost:8080/api/v1/auth/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -33,10 +36,8 @@ function Signup() {
             if(data.error){
                 setError(data.error);
             }
-            if(data.user){
-                localStorage.setItem('user', JSON.stringify(data.user));
-                localStorage.setItem('shop', JSON.stringify(data.shop));
-                navigate("../");
+            if(data.token){
+                dispatch(signup(data))
             }
         }catch (err) {
             console.log(err);
@@ -77,7 +78,7 @@ function Signup() {
                                 <Grid xs={12}>
                                     <FormControl required>
                                         <FormLabel>Password</FormLabel>
-                                        <Input type="password" name="password" slotProps={{ input: { 'pattern': '.{8,}', 'title': 'Mật khẩu phải chứa ít nhất 8 kí tự' } }} />
+                                        <Input type="password" name="password" slotProps={{ input: { 'pattern': '.{6,}', 'title': 'Mật khẩu phải chứa ít nhất 6 kí tự' } }} />
                                     </FormControl>
                                 </Grid>
                             </Grid>
