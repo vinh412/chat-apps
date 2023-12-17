@@ -3,14 +3,30 @@ import BackBar from "./BackBar";
 import { Box, IconButton, Input } from "@mui/joy";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { Slide } from "@mui/material";
+import { useSelector } from "react-redux";
 
 function CreateChannel({ setOpenCreateChannel }) {
   const [channelName, setChannelName] = React.useState("");
+  const user = useSelector((state) => state.auth.user);
+
+  const handleCreateChannel = (event) => {
+    event.preventDefault();
+    fetch("", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + user.token
+      },
+      body: JSON.stringify({ name: channelName })
+    });
+  };
+
   const continueButton = (
     <IconButton
       variant="solid"
       color="primary"
       sx={{ "--IconButton-size": "64px", "--IconButton-radius": "50%" }}
+      onClick={handleCreateChannel}
     >
       <ArrowForwardRoundedIcon />
     </IconButton>
@@ -44,7 +60,12 @@ function CreateChannel({ setOpenCreateChannel }) {
           />
         </Box>
         <Box alignSelf="end" p="16px">
-          <Slide direction="up" in={channelName.length > 0} mountOnEnter unmountOnExit>
+          <Slide
+            direction="up"
+            in={channelName.length > 0}
+            mountOnEnter
+            unmountOnExit
+          >
             {continueButton}
           </Slide>
         </Box>
