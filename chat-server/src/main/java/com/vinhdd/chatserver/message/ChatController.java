@@ -1,5 +1,6 @@
 package com.vinhdd.chatserver.message;
 
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -22,5 +23,14 @@ public class ChatController {
     ){
         headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
         return chatMessage;
+    }
+
+    @MessageMapping("/channel/{channelId}")
+    @SendTo("/channel/{channelId}")
+    public ChannelMessage sendChannelMessage(
+            @DestinationVariable Long channelId,
+            @Payload ChannelMessage channelMessage){
+        System.out.println(channelMessage.getKey().getChannelId());
+        return channelMessage;
     }
 }

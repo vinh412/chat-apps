@@ -3,6 +3,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ChatBox from "./pages/ChatBox";
 import { useSelector } from "react-redux";
+import TestWebSocket from "./pages/TestWebSocket";
 
 function App() {
   const user = useSelector(state => state.auth.user);
@@ -12,6 +13,7 @@ function App() {
           <Route path="/" element={user ? <ChatBox /> : <Navigate to='/login' />} />
           <Route path="/login" element={!user ? <Login /> : <Navigate to='/' />} />
           <Route path="/signup" element={!user ? <Signup /> : <Navigate to='/' />} />
+          <Route path="/test" element={<TestWebSocket />} />
         </Routes>
       </BrowserRouter>
   )

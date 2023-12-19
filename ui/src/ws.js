@@ -1,21 +1,19 @@
-// import { Stomp } from "@stomp/stompjs";
-// import SockJS from "sockjs-client";
+import { Client } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
 
-// const socket = new SockJS('http://localhost:8080/ws');
-// const stompClient = Stomp.over(socket);
+const stompClient = new Client({
+  webSocketFactory: () => new SockJS("http://localhost:8080/ws"),
+});
 
-// const connect = () => {
-//     stompClient.connect({}, onConnected, onError);
-// }
+stompClient.onConnect = () => {
+  console.log("đã kết nối");
+  stompClient.subscribe("/channel/1", (message) =>
+    console.log(message.body)
+  );
+};
 
-// const onConnected = () => {
-//     stompClient.subscribe('/topic/public', (message) => console.log(message.body));
+stompClient.onStompError = (error) => {
+  console.log(error);
+};
 
-//     stompClient.send('/app/chat.addUser', {}, JSON.stringify({ sender: 'vinh', type: 'JOIN'}));
-// }
-
-// const onError = (error) => {
-//     console.log(error);
-// }
-
-// export {connect, stompClient}
+export { stompClient };

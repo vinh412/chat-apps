@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  # mysql:
+  #   image: mysql:latest
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: 123
+  #     MYSQL_DATABASE: chat_apps
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - ./data/all-data.sql:/docker-entrypoint-initdb.d/all-data.sql
+
+  cassandra:
+    image: cassandra:latest
+    container_name: cassandra
+    ports:
+      - 9042:9042
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "cqlsh",
+          "-u cassandra",
+          "-p cassandra",
+          "-e describe keyspaces"
+        ]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+
+  cassandra-load-keyspace:
+    container_name: cassandra-load-keyspace
+    image: cassandra:latest
+    depends_on:
+      cassandra:
+        condition: service_healthy
+    volumes:
+      - ./data/data.cql:/data.cql
+    command: /bin/bash -c "echo loading cassandra keyspace && cqlsh cassandra -f /data.cql"
