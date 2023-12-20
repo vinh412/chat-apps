@@ -2,6 +2,7 @@ package com.vinhdd.chatapi.channel;
 import java.util.List;
 
 public interface ChannelService {
+//    List<Membership> getAllChannelsOfUser(String username);
     Channel createChannel(String username, Channel channel);
     List<Membership> getAllMembers(Long channelId);
     Membership requestJoinChannel(String username, Long channelId);

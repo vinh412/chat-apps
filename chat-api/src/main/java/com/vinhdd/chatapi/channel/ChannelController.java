@@ -1,6 +1,7 @@
 package com.vinhdd.chatapi.channel;
 
 import com.vinhdd.chatapi.channel.request.CreateChannelRequest;
+import com.vinhdd.chatapi.channel.response.ChannelResponse;
 import com.vinhdd.chatapi.config.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -25,6 +26,7 @@ public class ChannelController {
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
             @RequestBody Channel channel
     ){
+        System.out.println("create");
         String jwt = authorizationHeader.substring(7);
         String username = jwtService.extractUsername(jwt);
         return ResponseEntity.ok(channelService.createChannel(username, channel));
@@ -55,4 +57,13 @@ public class ChannelController {
         String username = jwtService.extractUsername(jwt);
         return ResponseEntity.ok(channelService.acceptJoinChannel(username, channelId, memberId));
     }
+
+//    @GetMapping("")
+//    public ResponseEntity<List<ChannelResponse>> getAllChannelsOfUser(
+//            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader
+//    ){
+//        String jwt = authorizationHeader.substring(7);
+//        String username = jwtService.extractUsername(jwt);
+//        return ResponseEntity.ok(channelService.getAllChannelsOfUser(username));
+//    }
 }

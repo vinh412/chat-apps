@@ -4,8 +4,10 @@ import { Box, IconButton, Input, Snackbar } from "@mui/joy";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { Slide } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import ErrorOutlineRoundedIcon from '@mui/icons-material/ErrorOutlineRounded';
+import ErrorOutlineRoundedIcon from "@mui/icons-material/ErrorOutlineRounded";
 import { logout } from "../../features/auth/authSlice";
+import { createChannel, receiveMessage } from "../../features/chat/chatSlice";
+import { stompClient } from "../../ws";
 
 function CreateChannel({ setOpenCreateChannel }) {
   const dispatch = useDispatch();
@@ -18,24 +20,47 @@ function CreateChannel({ setOpenCreateChannel }) {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/api/v1/channel/create",
+        `${process.env.REACT_APP_API_SERVER_URL}/api/v1/channel/create`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization:
-              "Bearer " +
-              "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2aW5oQGRldi5jb20iLCJpYXQiOjE3MDI2MTYyMzEsImV4cCI6MTcwMjcwMjYzMX0.xUwHhWbcFZI73TR7LUjUz7tSU8P2YNX6jTQk9xY0W5g",
+            Authorization: `Bearer ${user.token}`,
           },
-          mode: "no-cors",
-          credentials: "include",
+          mode: "cors",
           body: JSON.stringify({ name: channelName }),
         }
       );
 
+      const data = await response.json();
+
       if (!response.ok) {
-        setOpenSnackbar(true);
-        // dispatch(logout());
+        //setOpenSnackbar(true);
+        dispatch(logout());
+      } else {
+        stompClient.subscribe(`/channel/${data.id}`, (message) => {
+          console.log(message.body);
+          dispatch(receiveMessage(JSON.parse(message.body)));
+        });
+
+        stompClient.publish({
+          destination: `/app/channel/${data.id}`,
+          body: JSON.stringify({
+            key: { channelId: data.id, messageId: 1 },
+            userId: user.id,
+            content: `${user.firstname} created channel!`,
+            type: "NOTICE",
+            timestamp: Date.now(),
+          }),
+        });
+        dispatch(
+          createChannel({
+            id: data.id,
+            name: data.name,
+            members: [],
+            messages: [],
+          })
+        );
       }
     } catch (error) {
       console.log(error);

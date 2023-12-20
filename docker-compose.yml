@@ -1,15 +1,15 @@
 version: '3'
 
 services:
-  # mysql:
-  #   image: mysql:latest
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: 123
-  #     MYSQL_DATABASE: chat_apps
-  #   ports:
-  #     - "3306:3306"
-  #   volumes:
-  #     - ./data/all-data.sql:/docker-entrypoint-initdb.d/all-data.sql
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: chat_apps
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data/all-data.sql:/docker-entrypoint-initdb.d/all-data.sql
 
   cassandra:
     image: cassandra:latest

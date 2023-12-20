@@ -45,11 +45,11 @@ function ContactItem({ contact }) {
               level="body-sm"
               sx={{ color: clicked ? "white" : "black" }}
             >
-              {contact.messages.at(-1).timestamp}
+              {contact.messages.length > 0 && contact.messages.at(-1).timestamp}
             </Typography>
           </Box>
           <Typography sx={{ color: clicked ? "white" : "black" }}>
-            {contact.messages.at(-1).content}
+            {contact.messages.length > 0 && contact.messages.at(-1).content}
           </Typography>
         </Box>
       </Box>

@@ -1,20 +1,20 @@
-package com.vinhdd.chatapi.auth;
+package com.vinhdd.chatapi.channel.response;
 
-import com.vinhdd.chatapi.user.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResponse {
+@Builder
+public class MemberResponse {
     private Long id;
+    private String email;
     private String firstname;
     private String lastname;
-    private String email;
-    private Role role;
-    private String token;
+    private LocalDateTime joiningDate;
 }

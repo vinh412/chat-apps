@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface MembershipRepository extends JpaRepository<Membership, MembershipKey> {
     Optional<List<Membership>> findAllByChannelId(Long channelId);
+    Optional<List<Membership>> findAllByUserId(Long userId);
 }

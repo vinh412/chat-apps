@@ -5,10 +5,9 @@ import ContactItem from "./ContactItem";
 import { Slide } from "@mui/material";
 import CreateChannel from "./CreateChannel";
 import FloatingButton from "./FloatingButton";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
-function ContactDrawer({setSelectedContact}) {
-  const dispatch = useDispatch();
+function ContactDrawer() {
   const channels = useSelector(state => state.chat.channels);
 
   const [openCreateChannel, setOpenCreateChannel] = React.useState(false);

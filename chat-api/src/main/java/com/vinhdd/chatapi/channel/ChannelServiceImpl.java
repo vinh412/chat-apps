@@ -26,6 +26,12 @@ public class ChannelServiceImpl implements ChannelService {
                         .build()
         );
     }
+//    @Override
+//    public List<Membership> getAllChannelsOfUser(String username){
+//        User user = userRepository.findByEmail(username).orElseThrow();
+//        List<Membership> membershipList = membershipRepository.findAllByUserId(user.getId()).orElseThrow();
+//
+//    }
 
     @Override
     public Channel createChannel(String username, Channel channel) {
