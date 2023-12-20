@@ -1,12 +1,13 @@
 import { Box } from '@mui/joy'
 import React from 'react'
 import MessageText from './MessageText'
-import MessageText2 from './MessageText2'
 
-function Conversation() {
+function Conversation({messages}) {
   return (
     <Box display='flex' flexDirection='column'>
-        
+        {messages && messages.map(message => 
+          <MessageText message={message} />
+        )}
     </Box>
   )
 }

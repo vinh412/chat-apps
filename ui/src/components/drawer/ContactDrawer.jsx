@@ -5,8 +5,12 @@ import ContactItem from "./ContactItem";
 import { Slide } from "@mui/material";
 import CreateChannel from "./CreateChannel";
 import FloatingButton from "./FloatingButton";
+import { useDispatch, useSelector } from "react-redux";
 
-function ContactDrawer() {
+function ContactDrawer({setSelectedContact}) {
+  const dispatch = useDispatch();
+  const channels = useSelector(state => state.chat.channels);
+
   const [openCreateChannel, setOpenCreateChannel] = React.useState(false);
   const example = (
     <Box
@@ -35,22 +39,9 @@ function ContactDrawer() {
           height: "100%",
         }}
       >
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
+        {channels.map(contact => (
+          <ContactItem contact={contact} key={contact.id}/>
+        ))}
       </Box>
       <FloatingButton setOpenCreateChannel={setOpenCreateChannel} />
       <Slide

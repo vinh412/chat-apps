@@ -4,15 +4,15 @@ import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import PhoneEnabledRoundedIcon from '@mui/icons-material/PhoneEnabledRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 
-function ContactBar() {
+function ContactBar({contactName}) {
     return (
-        <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{p: '8px'}} >
+        <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{p: '8px'}} bgcolor="white">
             <Box display='flex' flexDirection='row'>
                 <Box sx={{padding: '0px 16px'}}>
                     <Avatar size='lg'/>
                 </Box>
                 <Box display='flex' flexDirection='column'>
-                    <Typography fontWeight='bold' >Tạ Xuân Kiên</Typography>
+                    <Typography fontWeight='bold' >{contactName}</Typography>
                     <Typography color='neutral' level='body-sm'>last seen recently</Typography>
                 </Box>
             </Box>

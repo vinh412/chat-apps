@@ -30,7 +30,6 @@ public class ChatController {
     public ChannelMessage sendChannelMessage(
             @DestinationVariable Long channelId,
             @Payload ChannelMessage channelMessage){
-        System.out.println(channelMessage.getKey().getChannelId());
         return channelMessage;
     }
 }

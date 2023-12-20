@@ -7,9 +7,6 @@ const stompClient = new Client({
 
 stompClient.onConnect = () => {
   console.log("đã kết nối");
-  stompClient.subscribe("/channel/1", (message) =>
-    console.log(message.body)
-  );
 };
 
 stompClient.onStompError = (error) => {
