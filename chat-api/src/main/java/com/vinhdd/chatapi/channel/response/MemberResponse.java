@@ -1,5 +1,7 @@
 package com.vinhdd.chatapi.channel.response;
 
+import com.vinhdd.chatapi.channel.Role;
+import com.vinhdd.chatapi.channel.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,5 +18,7 @@ public class MemberResponse {
     private String email;
     private String firstname;
     private String lastname;
+    private Role role;
+    private Status status;
     private LocalDateTime joiningDate;
 }

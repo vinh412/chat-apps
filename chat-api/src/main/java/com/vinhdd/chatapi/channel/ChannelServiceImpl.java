@@ -53,9 +53,13 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public List<Membership> getAllMembers(Long channelId) {
-        List<Membership> list = new ArrayList<>();
-        return membershipRepository.findAllByChannelId(channelId).orElseThrow();
+    public List<Membership> getAllMembersOfChannel(Long channelId) {
+        return membershipRepository.findAllMembersByChannelId(channelId).orElseThrow();
+    }
+
+    @Override
+    public List<Membership> getAllRequestsOfChannel(Long channelId){
+        return membershipRepository.findAllRequestsByChannelId(channelId).orElseThrow();
     }
 
     @Override
@@ -81,7 +85,6 @@ public class ChannelServiceImpl implements ChannelService {
     @Override
     public Membership acceptJoinChannel(String username, Long channelId, Long memberId) {
         User admin = userRepository.findByEmail(username).orElseThrow();
-        User member = userRepository.findById(memberId).orElseThrow();
         Membership adminMembership = membershipRepository.findById(new MembershipKey(channelId, admin.getId())).orElseThrow();
         Membership membership = membershipRepository.findById(new MembershipKey(channelId, memberId)).orElseThrow();
         if(adminMembership.getRole() != Role.ADMIN || membership.getStatus() != Status.PENDING){
@@ -90,6 +93,18 @@ public class ChannelServiceImpl implements ChannelService {
         membership.setStatus(Status.ACCEPTED);
         membership.setJoiningDate(LocalDateTime.now());
         return membershipRepository.save(membership);
+    }
+
+    @Override
+    public Membership declineJoinChannel(String username, Long channelId, Long memberId){
+        User admin = userRepository.findByEmail(username).orElseThrow();
+        Membership adminMembership = membershipRepository.findById(new MembershipKey(channelId, admin.getId())).orElseThrow();
+        Membership membership = membershipRepository.findById(new MembershipKey(channelId, memberId)).orElseThrow();
+        if(adminMembership.getRole() != Role.ADMIN || membership.getStatus() != Status.PENDING){
+            return null;
+        }
+        membershipRepository.delete(membership);
+        return null;
     }
 
     @Override
