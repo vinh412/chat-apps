@@ -6,8 +6,9 @@ import { Slide } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import ErrorOutlineRoundedIcon from "@mui/icons-material/ErrorOutlineRounded";
 import { logout } from "../../features/auth/authSlice";
-import { createChannel, receiveMessage } from "../../features/chat/chatSlice";
+import { addChannel, receiveMessage } from "../../features/chat/chatSlice";
 import { stompClient } from "../../ws";
+import { createChannel } from "../../fetchApi/fetchChannel";
 
 function CreateChannel({ setOpenCreateChannel }) {
   const dispatch = useDispatch();
@@ -19,18 +20,20 @@ function CreateChannel({ setOpenCreateChannel }) {
     event.preventDefault();
 
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_SERVER_URL}/api/v1/channel/create`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
-          },
-          mode: "cors",
-          body: JSON.stringify({ name: channelName }),
-        }
-      );
+      // const response = await fetch(
+      //   `${process.env.REACT_APP_API_SERVER_URL}/api/v1/channel/create`,
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       Authorization: `Bearer ${user.token}`,
+      //     },
+      //     mode: "cors",
+      //     body: JSON.stringify({ name: channelName }),
+      //   }
+      // );
+
+      const response = await createChannel(channelName, user.token);
 
       const data = await response.json();
 
@@ -54,13 +57,14 @@ function CreateChannel({ setOpenCreateChannel }) {
           }),
         });
         dispatch(
-          createChannel({
+          addChannel({
             id: data.id,
             name: data.name,
             members: [],
             messages: [],
           })
         );
+        setOpenCreateChannel(false);
       }
     } catch (error) {
       console.log(error);

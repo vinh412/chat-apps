@@ -4,9 +4,9 @@ import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import PhoneEnabledRoundedIcon from '@mui/icons-material/PhoneEnabledRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 
-function ContactBar({contactName}) {
+function ContactBar({contactName, onClick}) {
     return (
-        <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{p: '8px'}} bgcolor="white">
+        <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{p: '8px', cursor: 'pointer'}} bgcolor="white" onClick={()=>onClick(true)}>
             <Box display='flex' flexDirection='row'>
                 <Box sx={{padding: '0px 16px'}}>
                     <Avatar size='lg'/>

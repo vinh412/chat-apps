@@ -117,7 +117,7 @@ export const chatSlice = createSlice({
       state.currentChat = action.payload;
     },
 
-    createChannel: (state, action) => {
+    addChannel: (state, action) => {
       state.channels.push(action.payload);
     },
 
@@ -133,5 +133,5 @@ export const chatSlice = createSlice({
   },
 });
 
-export const { fetchAll, setCurrentChat, createChannel, receiveMessage } = chatSlice.actions;
+export const { fetchAll, setCurrentChat, addChannel, receiveMessage } = chatSlice.actions;
 export default chatSlice.reducer;

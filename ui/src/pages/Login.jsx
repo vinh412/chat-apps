@@ -6,6 +6,7 @@ import { Box, Typography, Card, Container, Grid, FormControl, FormLabel, Input, 
 import GoogleIcon from './GoogleIcon';
 import { useDispatch } from 'react-redux';
 import { login } from '../features/auth/authSlice';
+import { login as fetchLogin } from '../fetchApi/fetchAuth';
 
 function Login() {
     const navigate = useNavigate();
@@ -22,13 +23,7 @@ function Login() {
         };
 
         try {
-            const res = await fetch(`${process.env.REACT_APP_API_SERVER_URL}/api/v1/auth/authenticate`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
+            const res = await fetchLogin(formData);
 
             const data = await res.json();
             if(data.token){
