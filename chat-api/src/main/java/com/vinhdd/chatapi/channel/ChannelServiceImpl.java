@@ -1,9 +1,12 @@
 package com.vinhdd.chatapi.channel;
 
+import com.vinhdd.chatapi.channel.response.ChannelResponse;
+import com.vinhdd.chatapi.channel.response.MemberResponse;
 import com.vinhdd.chatapi.config.JwtService;
 import com.vinhdd.chatapi.user.User;
 import com.vinhdd.chatapi.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,16 +29,26 @@ public class ChannelServiceImpl implements ChannelService {
                         .build()
         );
     }
-//    @Override
-//    public List<Membership> getAllChannelsOfUser(String username){
-//        User user = userRepository.findByEmail(username).orElseThrow();
-//        List<Membership> membershipList = membershipRepository.findAllByUserId(user.getId()).orElseThrow();
-//
-//    }
+    @Override
+    public List<ChannelResponse> getAllChannelsOfUser(){
+        List<ChannelResponse> result = new ArrayList<>();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<Membership> membershipList = membershipRepository.findAllByUserId(user.getId()).orElseThrow();
+        for(Membership membership : membershipList){
+            result.add(ChannelResponse.builder()
+                            .id(membership.getChannel().getId())
+                            .name(membership.getChannel().getName())
+                            .dateCreated(membership.getChannel().getDateCreated())
+                            .members(getAllMembersOfChannel(membership.getChannel().getId()))
+                            .messages(new ArrayList<>())
+                    .build());
+        }
+        return result;
+    }
 
     @Override
-    public Channel createChannel(String username, Channel channel) {
-        User user = userRepository.findByEmail(username).orElseThrow();
+    public Channel createChannel(Channel channel) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         channel.setDateCreated(LocalDateTime.now());
         Channel newChannel = channelRepository.save(channel);
 
@@ -53,8 +66,21 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public List<Membership> getAllMembersOfChannel(Long channelId) {
-        return membershipRepository.findAllMembersByChannelId(channelId).orElseThrow();
+    public List<MemberResponse> getAllMembersOfChannel(Long channelId) {
+        List<MemberResponse> result = new ArrayList<>();
+        List<Membership> membershipList = membershipRepository.findAllMembersByChannelId(channelId).orElseThrow();
+        for(Membership membership : membershipList){
+            result.add(MemberResponse.builder()
+                            .id(membership.getUser().getId())
+                            .email(membership.getUser().getEmail())
+                            .firstname(membership.getUser().getFirstname())
+                            .lastname(membership.getUser().getLastname())
+                            .role(membership.getRole())
+                            .joiningDate(membership.getJoiningDate())
+                            .status(membership.getStatus())
+                    .build());
+        }
+        return result;
     }
 
     @Override
@@ -63,8 +89,8 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public Membership requestJoinChannel(String username, Long channelId) {
-        User user = userRepository.findByEmail(username).orElseThrow();
+    public Membership requestJoinChannel(Long channelId) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Channel channel = channelRepository.findById(channelId).orElseThrow();
 
         if(membershipRepository.findById(new MembershipKey(channelId, user.getId())).isPresent())
@@ -83,8 +109,8 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public Membership acceptJoinChannel(String username, Long channelId, Long memberId) {
-        User admin = userRepository.findByEmail(username).orElseThrow();
+    public Membership acceptJoinChannel(Long channelId, Long memberId) {
+        User admin = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Membership adminMembership = membershipRepository.findById(new MembershipKey(channelId, admin.getId())).orElseThrow();
         Membership membership = membershipRepository.findById(new MembershipKey(channelId, memberId)).orElseThrow();
         if(adminMembership.getRole() != Role.ADMIN || membership.getStatus() != Status.PENDING){
@@ -96,8 +122,8 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public Membership declineJoinChannel(String username, Long channelId, Long memberId){
-        User admin = userRepository.findByEmail(username).orElseThrow();
+    public Membership declineJoinChannel(Long channelId, Long memberId){
+        User admin = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Membership adminMembership = membershipRepository.findById(new MembershipKey(channelId, admin.getId())).orElseThrow();
         Membership membership = membershipRepository.findById(new MembershipKey(channelId, memberId)).orElseThrow();
         if(adminMembership.getRole() != Role.ADMIN || membership.getStatus() != Status.PENDING){

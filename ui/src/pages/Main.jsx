@@ -4,8 +4,10 @@ import ContactDrawer from "../components/drawer/ContactDrawer";
 import ChatField from "../components/chat-field/ChatField";
 import { stompClient } from "../ws";
 
+
 function Main() {
-  stompClient.activate();
+  // stompClient.activate();
+  
   return (
     <Box display="flex" flexDirection="row" height="100vh">
       <Box

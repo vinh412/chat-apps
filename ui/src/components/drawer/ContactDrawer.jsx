@@ -1,14 +1,41 @@
-import { Box } from "@mui/joy";
+import { Box, Typography } from "@mui/joy";
 import React from "react";
 import SearchBar from "./SearchBar";
 import ContactItem from "./ContactItem";
 import { Slide } from "@mui/material";
 import CreateChannel from "./CreateChannel";
 import FloatingButton from "./FloatingButton";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchChannels } from "../../features/chat/channelsSlice";
+import ContactItemLoading from "../loading/ContactItemLoading";
 
 function ContactDrawer() {
-  const channels = useSelector(state => state.chat.channels);
+  const dispatch = useDispatch();
+
+  const channels = useSelector((state) => state.channels.data);
+  //const orderedChannels = channels.slice().sort((a, b) => b.messages.at(-1).timestamp.localeCompare(a.messages.at(-1).timestamp));
+  const channelsStatus = useSelector((state) => state.channels.status);
+  const error = useSelector((state) => state.channels.error);
+  const token = useSelector((state) => state.auth.user.token);
+
+  React.useEffect(() => {
+    if (channelsStatus === "idle") {
+      dispatch(fetchChannels(token));
+    }
+  }, [dispatch, channelsStatus, token]);
+
+  let content;
+
+  if (channelsStatus === "loading") {
+    content = [];
+    for (let i = 0; i < 8; i++) content.push(<ContactItemLoading key={i}/>);
+  } else if (channelsStatus === "succeeded") {
+    content = channels.map((contact) => (
+      <ContactItem contact={contact} key={contact.id} />
+    ));
+  } else if (channelsStatus === "failed") {
+    content = <Typography>{error}</Typography>;
+  }
 
   const [openCreateChannel, setOpenCreateChannel] = React.useState(false);
   const example = (
@@ -29,7 +56,7 @@ function ContactDrawer() {
       display="flex"
       flexDirection="column"
       sx={{ p: "8px 0px", height: "100%" }}
-      position='relative'
+      position="relative"
     >
       <SearchBar />
       <Box
@@ -38,9 +65,7 @@ function ContactDrawer() {
           height: "100%",
         }}
       >
-        {channels.map(contact => (
-          <ContactItem contact={contact} key={contact.id}/>
-        ))}
+        {content}
       </Box>
       <FloatingButton setOpenCreateChannel={setOpenCreateChannel} />
       <Slide

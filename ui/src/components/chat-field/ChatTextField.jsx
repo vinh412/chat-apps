@@ -4,29 +4,31 @@ import SentimentSatisfiedRoundedIcon from "@mui/icons-material/SentimentSatisfie
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import { stompClient } from "../../ws";
 import { useDispatch, useSelector } from "react-redux";
-import { setCurrentChat } from "../../features/chat/chatSlice";
+import { setCurrentChatId } from "../../features/chat/currentChatSlice"; 
+import { sendMessage } from "../../features/chat/channelsSlice";
 
 function ChatTextField() {
   const [content, setContent] = React.useState("");
   const user = useSelector((state) => state.auth.user);
-  const currentChat = useSelector((state) => state.chat.currentChat);
+  const currentChatId = useSelector((state) => state.currentChatId);
+  const currentChat = useSelector((state) => state.channels.data.find(channel => channel.id === currentChatId));
   const dispatch = useDispatch();
 
-  const sendMessage = () => {
+  const handleSendMessage = () => {
     if (content.trim()) {
       const message = {
-        key: { channelId: currentChat.id, messageId: 1 },
+        key: { channelId: currentChatId, messageId: 1 },
         userId: user.id,
         content,
         type: "CHAT",
-        timestamp: Date.now(),
+        timestamp: new Date().toISOString(),
       };
-      stompClient.publish({
-        destination: `/app/channel/${currentChat.id}`,
-        body: JSON.stringify(message),
-      });
+      // stompClient.publish({
+      //   destination: `/app/channel/${currentChatId}`,
+      //   body: JSON.stringify(message),
+      // });
       dispatch(
-        setCurrentChat({ ...currentChat, messages: [...currentChat.messages, message] })
+        sendMessage(message)
       );
       setContent("");
     }
@@ -38,14 +40,14 @@ function ChatTextField() {
         size="lg"
         startDecorator={<SentimentSatisfiedRoundedIcon />}
         endDecorator={
-          <IconButton onClick={sendMessage}>
+          <IconButton onClick={handleSendMessage}>
             <SendRoundedIcon />
           </IconButton>
         }
         onChange={(event) => setContent(event.target.value)}
         value={content}
         onKeyDown={(event) => {
-          event.key === "Enter" && sendMessage();
+          event.key === "Enter" && handleSendMessage();
         }}
       />
     </Box>

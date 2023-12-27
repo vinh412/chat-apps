@@ -4,10 +4,11 @@ import Conversation from "./Conversation";
 import ChatTextField from "./ChatTextField";
 import { Box, Container } from "@mui/joy";
 import { useSelector } from "react-redux";
-import { Slide } from "@mui/material";
 import DetailDrawer from "./detail-drawer/DetailDrawer";
+
 function ChatField() {
-  const currentChat = useSelector((state) => state.chat.currentChat);
+  const currentChatId = useSelector(state => state.currentChatId);
+  const currentChat = useSelector((state) => state.channels.data.find(channel => channel.id === currentChatId));
   const [openDetailDrawer, setOpenDetailDrawer] = React.useState(false);
 
   return currentChat ? (

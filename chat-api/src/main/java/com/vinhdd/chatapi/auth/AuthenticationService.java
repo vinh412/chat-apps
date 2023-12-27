@@ -7,6 +7,9 @@ import com.vinhdd.chatapi.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +20,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final UserDetailsService userDetailsService;
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
                 .firstname(request.getFirstname())
@@ -37,7 +41,7 @@ public class AuthenticationService {
                 .build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResponse login(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -53,6 +57,19 @@ public class AuthenticationService {
                 .email(user.getEmail())
                 .role(user.getRole())
                 .token(jwtToken)
+                .build();
+    }
+
+    public AuthenticationResponse authenticate(){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String jwt = jwtService.generateToken(user);
+        return AuthenticationResponse.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
+                .role(user.getRole())
+                .token(jwt)
                 .build();
     }
 }

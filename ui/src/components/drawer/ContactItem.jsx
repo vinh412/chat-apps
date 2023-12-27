@@ -1,17 +1,18 @@
-import { Avatar, Box, Typography } from "@mui/joy";
 import React from "react";
+import { Avatar, Box, Typography } from "@mui/joy";
 import { useDispatch, useSelector } from "react-redux";
-import { setCurrentChat } from "../../features/chat/chatSlice";
+import { setCurrentChatId } from "../../features/chat/currentChatSlice";
+import { timeAgo } from "../../ultils";
 
 function ContactItem({ contact }) {
   const dispatch = useDispatch();
-  const currentChat = useSelector((state) => state.chat.currentChat);
+  const currentChatId = useSelector((state) => state.currentChatId);
+
   const handleClick = () => {
-    console.log(contact);
-    dispatch(setCurrentChat(contact));
+    dispatch(setCurrentChatId(contact.id));
   };
 
-  const clicked = currentChat && currentChat.id === contact.id;
+  const clicked = currentChatId === contact.id;
   return (
     <Box sx={{ p: "0px 8px" }}>
       <Box
@@ -27,7 +28,7 @@ function ContactItem({ contact }) {
         }}
       >
         <Box sx={{ paddingRight: "8px" }}>
-          <Avatar size="lg" />
+          <Avatar size="lg"></Avatar>
         </Box>
         <Box display="flex" flexDirection="column" width="100%">
           <Box
@@ -45,11 +46,15 @@ function ContactItem({ contact }) {
               level="body-sm"
               sx={{ color: clicked ? "white" : "black" }}
             >
-              {contact.messages.length > 0 && contact.messages.at(-1).timestamp}
+              {contact.messages &&
+                contact.messages.length > 0 &&
+                timeAgo(contact.messages.at(-1).timestamp)}
             </Typography>
           </Box>
           <Typography sx={{ color: clicked ? "white" : "black" }}>
-            {contact.messages.length > 0 && contact.messages.at(-1).content}
+            {contact.messages &&
+              contact.messages.length > 0 &&
+              contact.messages.at(-1).content}
           </Typography>
         </Box>
       </Box>

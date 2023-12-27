@@ -5,8 +5,7 @@ import { CssVarsProvider } from "@mui/joy/styles";
 import { Box, Typography, Card, Container, Grid, FormControl, FormLabel, Input, Button, Link, Checkbox, Divider } from '@mui/joy'
 import GoogleIcon from './GoogleIcon';
 import { useDispatch } from 'react-redux';
-import { login } from '../features/auth/authSlice';
-import { login as fetchLogin } from '../fetchApi/fetchAuth';
+import { fetchLogin } from '../features/auth/authSlice';
 
 function Login() {
     const navigate = useNavigate();
@@ -22,16 +21,7 @@ function Login() {
             password: formElements.password.value,
         };
 
-        try {
-            const res = await fetchLogin(formData);
-
-            const data = await res.json();
-            if(data.token){
-                dispatch(login(data));
-            }
-        }catch (err) {
-            console.log(err);
-        }
+        dispatch(fetchLogin(formData));
     }
 
     return (

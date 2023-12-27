@@ -1,14 +1,18 @@
 package com.vinhdd.chatapi.channel;
+import com.vinhdd.chatapi.channel.response.ChannelResponse;
+import com.vinhdd.chatapi.channel.response.MemberResponse;
+
 import java.util.List;
 
 public interface ChannelService {
 //    List<Membership> getAllChannelsOfUser(String username);
-    Channel createChannel(String username, Channel channel);
-    List<Membership> getAllMembersOfChannel(Long channelId);
+    Channel createChannel(Channel channel);
+    List<ChannelResponse> getAllChannelsOfUser();
+    List<MemberResponse> getAllMembersOfChannel(Long channelId);
     List<Membership> getAllRequestsOfChannel(Long channelId);
-    Membership requestJoinChannel(String username, Long channelId);
-    Membership acceptJoinChannel(String username, Long channelId, Long memberId);
-    Membership declineJoinChannel(String username, Long channelId, Long memberId);
+    Membership requestJoinChannel(Long channelId);
+    Membership acceptJoinChannel(Long channelId, Long memberId);
+    Membership declineJoinChannel(Long channelId, Long memberId);
     Membership addMember(Long userId, Long channelId);
     boolean leaveChannel(Long userId, Long channelId);
     Membership setMemberRole(Long userId, Long channelId, Role role);

@@ -1,73 +1,47 @@
 import React from "react";
 import BackBar from "./BackBar";
-import { Box, IconButton, Input, Snackbar } from "@mui/joy";
+import { Box, IconButton, Input } from "@mui/joy";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { Slide } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import ErrorOutlineRoundedIcon from "@mui/icons-material/ErrorOutlineRounded";
-import { logout } from "../../features/auth/authSlice";
-import { addChannel, receiveMessage } from "../../features/chat/chatSlice";
+import { fetchCreateChannel, receiveMessage } from "../../features/chat/channelsSlice";
 import { stompClient } from "../../ws";
-import { createChannel } from "../../fetchApi/fetchChannel";
 
 function CreateChannel({ setOpenCreateChannel }) {
   const dispatch = useDispatch();
   const [channelName, setChannelName] = React.useState("");
-  const user = useSelector((state) => state.auth.user);
-  const [openSnackbar, setOpenSnackbar] = React.useState(false);
+  const token = useSelector(state => state.auth.user.token);
+  const [createChannelStatus, setCreateChannelStatus] = React.useState('idle');
 
-  const handleCreateChannel = async (event) => {
-    event.preventDefault();
+  const canCreate = channelName && createChannelStatus === 'idle';
 
-    try {
-      // const response = await fetch(
-      //   `${process.env.REACT_APP_API_SERVER_URL}/api/v1/channel/create`,
-      //   {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //       Authorization: `Bearer ${user.token}`,
-      //     },
-      //     mode: "cors",
-      //     body: JSON.stringify({ name: channelName }),
-      //   }
-      // );
+  const handleCreateChannel = async () => {
 
-      const response = await createChannel(channelName, user.token);
+    if(canCreate){
+      try{
+        setCreateChannelStatus('pending');
+        await dispatch(fetchCreateChannel({channelName, jwt: token})).unwrap();
+        // stompClient.subscribe(`/channel/${data.id}`, (message) => {
+        //   console.log(message.body);
+        //   dispatch(receiveMessage(JSON.parse(message.body)));
+        // });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        //setOpenSnackbar(true);
-        dispatch(logout());
-      } else {
-        stompClient.subscribe(`/channel/${data.id}`, (message) => {
-          console.log(message.body);
-          dispatch(receiveMessage(JSON.parse(message.body)));
-        });
-
-        stompClient.publish({
-          destination: `/app/channel/${data.id}`,
-          body: JSON.stringify({
-            key: { channelId: data.id, messageId: 1 },
-            userId: user.id,
-            content: `${user.firstname} created channel!`,
-            type: "NOTICE",
-            timestamp: Date.now(),
-          }),
-        });
-        dispatch(
-          addChannel({
-            id: data.id,
-            name: data.name,
-            members: [],
-            messages: [],
-          })
-        );
+        // stompClient.publish({
+        //   destination: `/app/channel/${data.id}`,
+        //   body: JSON.stringify({
+        //     key: { channelId: data.id, messageId: 1 },
+        //     userId: user.id,
+        //     content: `${user.firstname} created channel!`,
+        //     type: "NOTICE",
+        //     timestamp: Date.now(),
+        //   }),
+        // });
         setOpenCreateChannel(false);
+      }catch(err){
+        console.log('Failed to create channel: ', err);
+      }finally{
+        setCreateChannelStatus('idle');
       }
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -77,6 +51,7 @@ function CreateChannel({ setOpenCreateChannel }) {
       color="primary"
       sx={{ "--IconButton-size": "64px", "--IconButton-radius": "50%" }}
       onClick={handleCreateChannel}
+      disabled={!canCreate}
     >
       <ArrowForwardRoundedIcon />
     </IconButton>
@@ -120,18 +95,6 @@ function CreateChannel({ setOpenCreateChannel }) {
           </Slide>
         </Box>
       </Box>
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={openSnackbar}
-        onClose={() => setOpenSnackbar(false)}
-        variant="soft"
-        color="danger"
-        invertedColors
-        size="lg"
-        startDecorator={<ErrorOutlineRoundedIcon />}
-      >
-        The authorization has been expired! Please login to continue
-      </Snackbar>
     </Box>
   );
 }

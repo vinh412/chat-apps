@@ -16,8 +16,7 @@ import {
 } from "@mui/joy";
 import GoogleIcon from "./GoogleIcon";
 import { useDispatch } from "react-redux";
-import { signup } from "../features/auth/authSlice";
-import { signup as fetchSignup } from "../fetchApi/fetchAuth";
+import { fetchSignUp } from "../features/auth/authSlice";
 
 function Signup() {
   const navigate = useNavigate();
@@ -35,19 +34,7 @@ function Signup() {
       firstname: formElements.firstname.value,
     };
 
-    try {
-      const res = await fetchSignup(formData);
-
-      const data = await res.json();
-      if (data.error) {
-        setError(data.error);
-      }
-      if (data.token) {
-        dispatch(signup(data));
-      }
-    } catch (err) {
-      console.log(err);
-    }
+    dispatch(fetchSignUp(formData));
   };
 
   return (
