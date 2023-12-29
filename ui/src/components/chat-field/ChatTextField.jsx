@@ -4,14 +4,13 @@ import SentimentSatisfiedRoundedIcon from "@mui/icons-material/SentimentSatisfie
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import { stompClient } from "../../ws";
 import { useDispatch, useSelector } from "react-redux";
-import { setCurrentChatId } from "../../features/chat/currentChatSlice"; 
-import { sendMessage } from "../../features/chat/channelsSlice";
+import { sendMessage } from "../../features/chat/chatSlice";
 
 function ChatTextField() {
   const [content, setContent] = React.useState("");
   const user = useSelector((state) => state.auth.user);
-  const currentChatId = useSelector((state) => state.currentChatId);
-  const currentChat = useSelector((state) => state.channels.data.find(channel => channel.id === currentChatId));
+  const currentChatId = useSelector((state) => state.chat.currentChatId);
+  const currentChat = useSelector((state) => state.chat.channels.find(channel => channel.id === currentChatId));
   const dispatch = useDispatch();
 
   const handleSendMessage = () => {

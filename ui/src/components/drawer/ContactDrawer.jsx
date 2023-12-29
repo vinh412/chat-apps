@@ -6,16 +6,16 @@ import { Slide } from "@mui/material";
 import CreateChannel from "./CreateChannel";
 import FloatingButton from "./FloatingButton";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchChannels } from "../../features/chat/channelsSlice";
+import { fetchChannels } from "../../features/chat/chatSlice";
 import ContactItemLoading from "../loading/ContactItemLoading";
 
 function ContactDrawer() {
   const dispatch = useDispatch();
 
-  const channels = useSelector((state) => state.channels.data);
+  const channels = useSelector((state) => state.chat.channels);
   //const orderedChannels = channels.slice().sort((a, b) => b.messages.at(-1).timestamp.localeCompare(a.messages.at(-1).timestamp));
-  const channelsStatus = useSelector((state) => state.channels.status);
-  const error = useSelector((state) => state.channels.error);
+  const channelsStatus = useSelector((state) => state.chat.status);
+  const error = useSelector((state) => state.chat.error);
   const token = useSelector((state) => state.auth.user.token);
 
   React.useEffect(() => {

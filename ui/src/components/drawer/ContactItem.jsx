@@ -1,12 +1,12 @@
 import React from "react";
 import { Avatar, Box, Typography } from "@mui/joy";
 import { useDispatch, useSelector } from "react-redux";
-import { setCurrentChatId } from "../../features/chat/currentChatSlice";
+import { setCurrentChatId } from "../../features/chat/chatSlice";
 import { timeAgo } from "../../ultils";
 
 function ContactItem({ contact }) {
   const dispatch = useDispatch();
-  const currentChatId = useSelector((state) => state.currentChatId);
+  const currentChatId = useSelector((state) => state.chat.currentChatId);
 
   const handleClick = () => {
     dispatch(setCurrentChatId(contact.id));

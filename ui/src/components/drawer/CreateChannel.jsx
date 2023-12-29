@@ -4,7 +4,7 @@ import { Box, IconButton, Input } from "@mui/joy";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { Slide } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCreateChannel, receiveMessage } from "../../features/chat/channelsSlice";
+import { fetchCreateChannel, receiveMessage } from "../../features/chat/chatSlice";
 import { stompClient } from "../../ws";
 
 function CreateChannel({ setOpenCreateChannel }) {

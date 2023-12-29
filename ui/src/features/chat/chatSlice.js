@@ -2,9 +2,10 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import client from "../../fetchApi";
 
 const initialState = {
-  data: [],
+  channels: [],
   status: "idle",
   error: null,
+  currentChatId: null,
 };
 
 const example = {
@@ -108,7 +109,7 @@ const example = {
 };
 
 export const fetchChannels = createAsyncThunk(
-  "channels/fetchChannels",
+  "chat/fetchChannels",
   async (jwt) => {
     const response = await client.getAllChannelsOfUser(jwt);
     return await response.json();
@@ -116,34 +117,33 @@ export const fetchChannels = createAsyncThunk(
 );
 
 export const fetchCreateChannel = createAsyncThunk(
-  "channels/fetchCreateChannel",
+  "chat/fetchCreateChannel",
   async (data) => {
     const response = await client.createChannel(data.channelName, data.jwt);
     return await response.json();
   }
 );
 
-export const channelsSlice = createSlice({
-  name: "channels",
+export const chatSlice = createSlice({
+  name: "chat",
   initialState,
   reducers: {
     sendMessage: (state, action) => {
       const channelId = action.payload.key.channelId;
-      const channel = state.data.find((channel) => channel.id === channelId);
+      const channel = state.channels.find((channel) => channel.id === channelId);
       if (channel) {
         channel.messages.push(action.payload);
       }
     },
 
     receiveMessage: (state, action) => {
-      let index;
-      for (let i = 0; i < state.channels.length; i++) {
-        if (state.channels[i].id === action.payload.key.channelId) {
-          index = i;
-        }
-      }
-      state.channels[index].messages.push(action.payload);
+      const channel = state.channels.find(channel => channel.id === action.payload.key.channelId);
+      channel.messages.push(action.payload);
     },
+
+    setCurrentChatId: (state, action) => {
+      state.currentChatId = action.payload;
+    }
   },
   extraReducers(builder) {
     builder
@@ -152,17 +152,17 @@ export const channelsSlice = createSlice({
       })
       .addCase(fetchChannels.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data = action.payload;
+        state.channels = action.payload;
       })
       .addCase(fetchChannels.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       })
       .addCase(fetchCreateChannel.fulfilled, (state, action) => {
-        state.data.push(action.payload);
+        state.channels.push(action.payload);
       });
   },
 });
 
-export const { sendMessage, receiveMessage } = channelsSlice.actions;
-export default channelsSlice.reducer;
+export const { sendMessage, receiveMessage, setCurrentChatId } = chatSlice.actions;
+export default chatSlice.reducer;

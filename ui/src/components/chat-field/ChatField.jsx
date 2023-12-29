@@ -7,8 +7,8 @@ import { useSelector } from "react-redux";
 import DetailDrawer from "./detail-drawer/DetailDrawer";
 
 function ChatField() {
-  const currentChatId = useSelector(state => state.currentChatId);
-  const currentChat = useSelector((state) => state.channels.data.find(channel => channel.id === currentChatId));
+  const currentChatId = useSelector(state => state.chat.currentChatId);
+  const currentChat = useSelector((state) => state.chat.channels.find(channel => channel.id === currentChatId));
   const [openDetailDrawer, setOpenDetailDrawer] = React.useState(false);
 
   return currentChat ? (
