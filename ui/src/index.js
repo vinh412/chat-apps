@@ -7,7 +7,9 @@ import store from "./app/store";
 import { fetchUser } from "./features/auth/authSlice";
 
 const jwt = localStorage.getItem("token");
-store.dispatch(fetchUser(jwt));
+if(jwt){
+  store.dispatch(fetchUser(jwt));
+}
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
