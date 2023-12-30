@@ -2,6 +2,7 @@ package com.vinhdd.chatapi.channel;
 
 import com.vinhdd.chatapi.channel.response.ChannelResponse;
 import com.vinhdd.chatapi.channel.response.MemberResponse;
+import com.vinhdd.chatapi.message.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class ChannelController {
         return ResponseEntity.ok(channelService.test(channel));
     }
     @PostMapping("/create")
-    public ResponseEntity<Channel> createChannel(
+    public ResponseEntity<ChannelResponse> createChannel(
             @RequestBody Channel channel
     ){
         return ResponseEntity.ok(channelService.createChannel(channel));

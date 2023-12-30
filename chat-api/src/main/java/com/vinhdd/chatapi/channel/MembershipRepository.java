@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface MembershipRepository extends JpaRepository<Membership, MembershipKey> {
     @Query(value = "SELECT * FROM membership WHERE channel_id = ?1 AND status = 'ACCEPTED' ", nativeQuery = true)

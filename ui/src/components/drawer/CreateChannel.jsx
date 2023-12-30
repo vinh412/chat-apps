@@ -4,13 +4,15 @@ import { Box, IconButton, Input } from "@mui/joy";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { Slide } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCreateChannel, receiveMessage } from "../../features/chat/chatSlice";
+import { fetchCreateChannel, receiveMessage, setCurrentChatId } from "../../features/chat/chatSlice";
 import { stompClient } from "../../ws";
 
 function CreateChannel({ setOpenCreateChannel }) {
   const dispatch = useDispatch();
   const [channelName, setChannelName] = React.useState("");
   const token = useSelector(state => state.auth.user.token);
+  const userId = useSelector(state => state.auth.user.id);
+  const userFirtsname = useSelector(state => state.auth.user.firstname);
   const [createChannelStatus, setCreateChannelStatus] = React.useState('idle');
 
   const canCreate = channelName && createChannelStatus === 'idle';
@@ -20,22 +22,25 @@ function CreateChannel({ setOpenCreateChannel }) {
     if(canCreate){
       try{
         setCreateChannelStatus('pending');
-        await dispatch(fetchCreateChannel({channelName, jwt: token})).unwrap();
-        // stompClient.subscribe(`/channel/${data.id}`, (message) => {
-        //   console.log(message.body);
-        //   dispatch(receiveMessage(JSON.parse(message.body)));
-        // });
+        const newChannel = await dispatch(fetchCreateChannel({channelName, jwt: token})).unwrap();
 
-        // stompClient.publish({
-        //   destination: `/app/channel/${data.id}`,
-        //   body: JSON.stringify({
-        //     key: { channelId: data.id, messageId: 1 },
-        //     userId: user.id,
-        //     content: `${user.firstname} created channel!`,
-        //     type: "NOTICE",
-        //     timestamp: Date.now(),
-        //   }),
-        // });
+        stompClient.subscribe(`/channel/${newChannel.id}`, (message) => {
+          dispatch(receiveMessage(JSON.parse(message.body)));
+        });
+
+        stompClient.publish({
+          destination: `/app/channel/${newChannel.id}`,
+          body: JSON.stringify({
+            key: { channelId: newChannel.id },
+            userId: userId,
+            content: `${userFirtsname} created channel!`,
+            type: "NOTICE",
+            timestamp: Date.now(),
+          }),
+        });
+
+        dispatch(setCurrentChatId(newChannel.id));
+
         setOpenCreateChannel(false);
       }catch(err){
         console.log('Failed to create channel: ', err);

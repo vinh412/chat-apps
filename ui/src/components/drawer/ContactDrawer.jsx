@@ -6,21 +6,40 @@ import { Slide } from "@mui/material";
 import CreateChannel from "./CreateChannel";
 import FloatingButton from "./FloatingButton";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchChannels } from "../../features/chat/chatSlice";
+import { fetchChannels, receiveMessage } from "../../features/chat/chatSlice";
 import ContactItemLoading from "../loading/ContactItemLoading";
+import { stompClient } from "../../ws";
 
 function ContactDrawer() {
   const dispatch = useDispatch();
 
   const channels = useSelector((state) => state.chat.channels);
-  //const orderedChannels = channels.slice().sort((a, b) => b.messages.at(-1).timestamp.localeCompare(a.messages.at(-1).timestamp));
+  const orderedChannels = channels.slice().sort((a, b) => {
+    if(b.messages.length > 0 && a.messages.length > 0){
+      return b.messages.at(-1).timestamp.localeCompare(a.messages.at(-1).timestamp)
+    }
+  });
   const channelsStatus = useSelector((state) => state.chat.status);
   const error = useSelector((state) => state.chat.error);
   const token = useSelector((state) => state.auth.user.token);
 
+  const onReceivedMessage = (message) => {
+    dispatch(receiveMessage(JSON.parse(message.body)));
+  };
+
   React.useEffect(() => {
     if (channelsStatus === "idle") {
       dispatch(fetchChannels(token));
+      console.log("idle");
+    } else if (channelsStatus === "succeeded") {
+      stompClient.activate();
+      stompClient.onConnect = () => {
+        console.log("Đã kết nối");
+        channels.forEach((channel) => {
+          console.log("kết nối tới channel", channel.id);
+          stompClient.subscribe(`/channel/${channel.id}`, onReceivedMessage);
+        });
+      };
     }
   }, [dispatch, channelsStatus, token]);
 
@@ -28,9 +47,9 @@ function ContactDrawer() {
 
   if (channelsStatus === "loading") {
     content = [];
-    for (let i = 0; i < 8; i++) content.push(<ContactItemLoading key={i}/>);
+    for (let i = 0; i < 8; i++) content.push(<ContactItemLoading key={i} />);
   } else if (channelsStatus === "succeeded") {
-    content = channels.map((contact) => (
+    content = orderedChannels.map((contact) => (
       <ContactItem contact={contact} key={contact.id} />
     ));
   } else if (channelsStatus === "failed") {

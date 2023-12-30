@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ChannelService {
 //    List<Membership> getAllChannelsOfUser(String username);
-    Channel createChannel(Channel channel);
+    ChannelResponse createChannel(Channel channel);
     List<ChannelResponse> getAllChannelsOfUser();
     List<MemberResponse> getAllMembersOfChannel(Long channelId);
     List<Membership> getAllRequestsOfChannel(Long channelId);

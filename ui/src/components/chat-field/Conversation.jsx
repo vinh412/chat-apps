@@ -6,7 +6,7 @@ function Conversation({messages}) {
   return (
     <Box display='flex' flexDirection='column'>
         {messages && messages.map(message => 
-          <MessageText message={message}/>
+          <MessageText message={message} key={message.key.messageId}/>
         )}
     </Box>
   )

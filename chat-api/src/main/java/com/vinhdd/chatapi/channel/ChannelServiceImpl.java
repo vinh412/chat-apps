@@ -2,7 +2,9 @@ package com.vinhdd.chatapi.channel;
 
 import com.vinhdd.chatapi.channel.response.ChannelResponse;
 import com.vinhdd.chatapi.channel.response.MemberResponse;
+import com.vinhdd.chatapi.channel.response.MessageResponse;
 import com.vinhdd.chatapi.config.JwtService;
+import com.vinhdd.chatapi.message.MessageService;
 import com.vinhdd.chatapi.user.User;
 import com.vinhdd.chatapi.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +15,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
 public class ChannelServiceImpl implements ChannelService {
+    private final MessageService messageService;
     private final ChannelRepository channelRepository;
     private final MembershipRepository membershipRepository;
     private final UserRepository userRepository;
@@ -40,29 +44,46 @@ public class ChannelServiceImpl implements ChannelService {
                             .name(membership.getChannel().getName())
                             .dateCreated(membership.getChannel().getDateCreated())
                             .members(getAllMembersOfChannel(membership.getChannel().getId()))
-                            .messages(new ArrayList<>())
+                            .messages(messageService.fetchAllMessagesOfChannel(membership.getChannel().getId()))
                     .build());
         }
         return result;
     }
 
     @Override
-    public Channel createChannel(Channel channel) {
+    public ChannelResponse createChannel(Channel channel) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         channel.setDateCreated(LocalDateTime.now());
         Channel newChannel = channelRepository.save(channel);
 
-        Membership membership = Membership.builder()
-                .id(new MembershipKey(newChannel.getId(), user.getId()))
-                .channel(newChannel)
-                .user(user)
-                .status(Status.ACCEPTED)
-                .role(Role.ADMIN)
-                .joiningDate(LocalDateTime.now())
+        Membership membership = membershipRepository.save(
+                Membership.builder()
+                        .id(new MembershipKey(newChannel.getId(), user.getId()))
+                        .channel(newChannel)
+                        .user(user)
+                        .status(Status.ACCEPTED)
+                        .role(Role.ADMIN)
+                        .joiningDate(LocalDateTime.now())
+                        .build()
+        );
+        return ChannelResponse.builder()
+                .id(newChannel.getId())
+                .name(newChannel.getName())
+                .dateCreated(newChannel.getDateCreated())
+                .members(List.of(
+                        MemberResponse.builder()
+                                .id(membership.getUser().getId())
+                                .email(membership.getUser().getEmail())
+                                .firstname(membership.getUser().getFirstname())
+                                .lastname(membership.getUser().getLastname())
+                                .role(membership.getRole())
+                                .joiningDate(membership.getJoiningDate())
+                                .status(membership.getStatus())
+                                .build()
+                        )
+                )
+                .messages(new ArrayList<>())
                 .build();
-
-        membershipRepository.save(membership);
-        return newChannel;
     }
 
     @Override

@@ -9,7 +9,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./data/all-data.sql:/docker-entrypoint-initdb.d/all-data.sql
+      - ./data/chatapps_database.sql:/docker-entrypoint-initdb.d/chatapps_database.sql
 
   cassandra:
     image: cassandra:latest
