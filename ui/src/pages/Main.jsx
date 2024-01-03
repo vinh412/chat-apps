@@ -1,6 +1,6 @@
 import { Box } from "@mui/joy";
 import React from "react";
-import ContactDrawer from "../components/drawer/ContactDrawer";
+import ContactDrawer from "../components/left-drawer/ContactDrawer";
 import ChatField from "../components/chat-field/ChatField";
 
 function Main() {

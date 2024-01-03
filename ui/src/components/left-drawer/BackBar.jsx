@@ -1,22 +1,23 @@
 import { Box, IconButton, Typography } from "@mui/joy";
 import React from "react";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
+import Bar from "../common/Bar";
 
-function Bar({onClick}) {
+function BackBar({ title, handleBack }) {
   return (
-    <Box display="flex" flexDirection="row" justifyContent="start">
+    <Bar>
       <Box sx={{ p: "4px" }}>
-        <IconButton size="lg" onClick={onClick}>
-          <CloseRoundedIcon />
+        <IconButton size="lg" onClick={handleBack}>
+          <ArrowBackRoundedIcon />
         </IconButton>
       </Box>
       <Box sx={{ p: "4px" }} alignSelf="center">
         <Typography level="title-lg" sx={{ p: "0" }}>
-          Group Detail
+          {title}
         </Typography>
       </Box>
-    </Box>
+    </Bar>
   );
 }
 
-export default Bar;
+export default BackBar;

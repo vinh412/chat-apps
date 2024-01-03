@@ -15,11 +15,12 @@ import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import { logout } from "../../features/auth/authSlice";
 import { useDispatch } from "react-redux";
+import Bar from "../common/Bar";
 
 function SearchBar() {
   const dispatch = useDispatch();
   return (
-    <Box display="flex" flexDirection="row" sx={{ p: "0px 8px 16px 0px" }}>
+    <Bar>
       <Box sx={{ p: "4px" }}>
         <Dropdown>
           <MenuButton
@@ -52,7 +53,7 @@ function SearchBar() {
           variant="soft"
         />
       </Box>
-    </Box>
+    </Bar>
   );
 }
 

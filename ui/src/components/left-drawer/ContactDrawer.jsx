@@ -15,8 +15,10 @@ function ContactDrawer() {
 
   const channels = useSelector((state) => state.chat.channels);
   const orderedChannels = channels.slice().sort((a, b) => {
-    if(b.messages.length > 0 && a.messages.length > 0){
-      return b.messages.at(-1).timestamp.localeCompare(a.messages.at(-1).timestamp)
+    if (b.messages.length > 0 && a.messages.length > 0) {
+      return b.messages
+        .at(-1)
+        .timestamp.localeCompare(a.messages.at(-1).timestamp);
     }
   });
   const channelsStatus = useSelector((state) => state.chat.status);
@@ -57,7 +59,7 @@ function ContactDrawer() {
   }
 
   const [openCreateChannel, setOpenCreateChannel] = React.useState(false);
-  const example = (
+  const createChannel = (
     <Box
       position="absolute"
       left={0}
@@ -74,11 +76,12 @@ function ContactDrawer() {
     <Box
       display="flex"
       flexDirection="column"
-      sx={{ p: "8px 0px", height: "100%" }}
+      sx={{ height: "100%" }}
       position="relative"
     >
       <SearchBar />
       <Box
+        p="8px"
         sx={{
           overflow: "auto",
           height: "100%",
@@ -93,7 +96,7 @@ function ContactDrawer() {
         mountOnEnter
         unmountOnExit
       >
-        {example}
+        {createChannel}
       </Slide>
     </Box>
   );

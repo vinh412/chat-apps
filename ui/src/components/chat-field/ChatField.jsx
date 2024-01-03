@@ -4,7 +4,7 @@ import Conversation from "./Conversation";
 import ChatTextField from "./ChatTextField";
 import { Box, Container } from "@mui/joy";
 import { useSelector } from "react-redux";
-import DetailDrawer from "./detail-drawer/DetailDrawer";
+import DetailDrawer from "../right-drawer/DetailDrawer";
 
 function ChatField() {
   const currentChatId = useSelector(state => state.chat.currentChatId);

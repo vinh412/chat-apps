@@ -1,7 +1,7 @@
-import { Box, IconButton, TabList, TabPanel, Tabs, Typography } from "@mui/joy";
-import Tab, { tabClasses } from "@mui/joy/Tab";
+import { AspectRatio, Box, TabList, TabPanel, Tabs } from "@mui/joy";
+import Tab from "@mui/joy/Tab";
 import React from "react";
-import Bar from "./Bar";
+import DetailBar from "./DetailBar";
 import MembersTabPanel from "./MembersTabPanel";
 
 function DetailDrawer({ setOpen }) {
@@ -9,9 +9,10 @@ function DetailDrawer({ setOpen }) {
     <Box
       display="flex"
       flexDirection="column"
-      sx={{ p: "8px 0px", width: "50%", height: "100%" }}
+      sx={{ width: "50%", height: "100vh" }}
     >
-      <Bar onClick={() => setOpen(false)} />
+      <DetailBar onClick={() => setOpen(false)} />
+      <AspectRatio></AspectRatio>
       <Box height="100%">
         <Tabs defaultValue={0}>
           <TabList>
@@ -20,7 +21,7 @@ function DetailDrawer({ setOpen }) {
             <Tab>Files</Tab>
             <Tab>Links</Tab>
           </TabList>
-          <TabPanel value={0} sx={{ p: "8px" }}>
+          <TabPanel value={0} sx={{ p: "8px", height: "100%" }}>
             <MembersTabPanel />
           </TabPanel>
           <TabPanel value={1}>

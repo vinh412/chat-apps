@@ -65,7 +65,7 @@ function CreateChannel({ setOpenCreateChannel }) {
     <Box
       display="flex"
       flexDirection="column"
-      sx={{ p: "8px 0px", height: "100%" }}
+      sx={{ height: "100%" }}
     >
       <BackBar
         title="New Channel"
