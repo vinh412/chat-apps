@@ -23,6 +23,7 @@ function ContactDrawer() {
   });
   const channelsStatus = useSelector((state) => state.chat.status);
   const error = useSelector((state) => state.chat.error);
+  const userId = useSelector(state => state.auth.user.id);
   const token = useSelector((state) => state.auth.user.token);
 
   const onReceivedMessage = (message) => {
@@ -32,11 +33,11 @@ function ContactDrawer() {
   React.useEffect(() => {
     if (channelsStatus === "idle") {
       dispatch(fetchChannels(token));
-      console.log("idle");
     } else if (channelsStatus === "succeeded") {
       stompClient.activate();
       stompClient.onConnect = () => {
         console.log("Đã kết nối");
+        stompClient.subscribe(`/user/${userId}`, onReceivedMessage)
         channels.forEach((channel) => {
           console.log("kết nối tới channel", channel.id);
           stompClient.subscribe(`/channel/${channel.id}`, onReceivedMessage);

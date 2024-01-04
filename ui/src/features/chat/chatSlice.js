@@ -25,6 +25,18 @@ export const fetchCreateChannel = createAsyncThunk(
   }
 );
 
+export const addMembersToChannel = createAsyncThunk(
+  "chat/addMembersToChannel",
+  async (data) => {
+    const response = await client.addMembersToChannel(
+      data.jwt,
+      data.channelId,
+      data.userIds
+    );
+    return await response.json();
+  }
+);
+
 export const chatSlice = createSlice({
   name: "chat",
   initialState,
@@ -40,10 +52,15 @@ export const chatSlice = createSlice({
     },
 
     receiveMessage: (state, action) => {
-      const channel = state.channels.find(
-        (channel) => channel.id === action.payload.key.channelId
-      );
-      channel.messages.push(action.payload);
+      const message = action.payload;
+      if (message.type === "JOIN") {
+        state.status = "idle";
+      } else {
+        const channel = state.channels.find(
+          (channel) => channel.id === message.key.channelId
+        );
+        channel.messages.push(message);
+      }
     },
 
     setCurrentChatId: (state, action) => {
@@ -65,6 +82,12 @@ export const chatSlice = createSlice({
       })
       .addCase(fetchCreateChannel.fulfilled, (state, action) => {
         state.channels.push(action.payload);
+      })
+      .addCase(addMembersToChannel.fulfilled, (state, action) => {
+        const channel = state.channels.find(
+          (channel) => channel.id === action.payload.data.channelId
+        );
+        channel.members.push(...action.payload.data.newMembers);
       });
   },
 });

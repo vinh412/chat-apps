@@ -24,13 +24,13 @@ const client = {
   authenticate: (jwt) => {
     return fetch(`${url}/api/v1/auth/authenticate`, {
       headers: {
-        Authorization: `Bearer ${jwt}`
+        Authorization: `Bearer ${jwt}`,
       },
-      mode: "cors"
+      mode: "cors",
     });
   },
 
-  createChannel : (channelName, jwt) => {
+  createChannel: (channelName, jwt) => {
     return fetch(`${url}/api/v1/channel/create`, {
       method: "POST",
       headers: {
@@ -41,18 +41,18 @@ const client = {
       mode: "cors",
     });
   },
-  
-  getAllChannelsOfUser : (jwt) => {
+
+  getAllChannelsOfUser: (jwt) => {
     return fetch(`${url}/api/v1/channel/allOfUser`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${jwt}`
+        Authorization: `Bearer ${jwt}`,
       },
       mode: "cors",
     });
   },
-  
-  getAllMembersOfChannel : (channelId, jwt) => {
+
+  getAllMembersOfChannel: (channelId, jwt) => {
     return fetch(`${url}/api/v1/channel/${channelId}/members`, {
       method: "GET",
       headers: {
@@ -61,7 +61,28 @@ const client = {
       mode: "cors",
     });
   },
-};
 
+  findUsersByEmail: (email, jwt) => {
+    return fetch(`${url}/api/v1/users/q=${email}`, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + jwt,
+      },
+      mode: "cors",
+    });
+  },
+
+  addMembersToChannel: (jwt, channelId, userIdList) => {
+    return fetch(`${url}/api/v1/channel/${channelId}/add`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + jwt,
+      },
+      mode: 'cors',
+      body: JSON.stringify({userIds: userIdList}),
+    })
+  }
+};
 
 export default client;

@@ -13,6 +13,7 @@ import {
   Input,
   Button,
   Divider,
+  Link,
 } from "@mui/joy";
 import GoogleIcon from "./GoogleIcon";
 import { useDispatch } from "react-redux";
@@ -110,6 +111,11 @@ function Signup() {
               >
                 Sign in with Google
               </Button>
+              <Box display="flex" justifyContent="center">
+                <Link fontSize="sm" href="/login" fontWeight="lg">
+                  Login here!
+                </Link>
+              </Box>
             </Box>
           </Card>
         </Box>

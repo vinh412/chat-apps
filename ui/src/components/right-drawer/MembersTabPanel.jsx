@@ -23,7 +23,7 @@ function MembersTabPanel() {
       width='25%'
       height="100%"
       bgcolor="white"
-      zIndex={1050}
+      zIndex={10}
     >
       <SearchPeople setOpenSearchPeople={setOpenSearchPeople} />
     </Box>
@@ -32,7 +32,7 @@ function MembersTabPanel() {
     <Box>
       <Box>
         {members.map((member) => (
-          <MemberCard name={member.firstname + " " + member.lastname} />
+          <MemberCard name={member.firstname + " " + member.lastname} key={member.id}/>
         ))}
       </Box>
       <IconButton
