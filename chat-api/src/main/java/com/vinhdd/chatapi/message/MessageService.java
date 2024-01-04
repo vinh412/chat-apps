@@ -16,7 +16,7 @@ public class MessageService {
     final private RestTemplate restTemplate;
 
     public List<MessageResponse> fetchAllMessagesOfChannel(UUID channelId){
-        String apiUrl = "http://localhost:8080/api/v1/messages/" + channelId;
+        String apiUrl = "https://5488-2405-4802-1ca4-5be0-e52c-3919-dba4-9241.ngrok-free.app/api/v1/messages/" + channelId;
         MessageResponse[] messages = restTemplate.getForObject(apiUrl, MessageResponse[].class);
         if (messages != null) {
             return Arrays.stream(messages).toList();
