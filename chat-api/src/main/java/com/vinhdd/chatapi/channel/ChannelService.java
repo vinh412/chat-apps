@@ -1,20 +1,21 @@
 package com.vinhdd.chatapi.channel;
-import com.vinhdd.chatapi.channel.response.ChannelResponse;
-import com.vinhdd.chatapi.channel.response.MemberResponse;
+import com.vinhdd.chatapi.response.ChannelResponse;
+import com.vinhdd.chatapi.response.MemberResponse;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface ChannelService {
 //    List<Membership> getAllChannelsOfUser(String username);
     ChannelResponse createChannel(Channel channel);
     List<ChannelResponse> getAllChannelsOfUser();
-    List<MemberResponse> getAllMembersOfChannel(Long channelId);
-    List<Membership> getAllRequestsOfChannel(Long channelId);
-    Membership requestJoinChannel(Long channelId);
-    Membership acceptJoinChannel(Long channelId, Long memberId);
-    Membership declineJoinChannel(Long channelId, Long memberId);
-    Membership addMember(Long userId, Long channelId);
-    boolean leaveChannel(Long userId, Long channelId);
-    Membership setMemberRole(Long userId, Long channelId, Role role);
-    boolean deleteMember(Long userId, Long channelId);
+    List<MemberResponse> getAllMembersOfChannel(UUID channelId);
+    List<Membership> getAllRequestsOfChannel(UUID channelId);
+    Membership requestJoinChannel(UUID channelId);
+    Membership acceptJoinChannel(UUID channelId, UUID memberId);
+    Membership declineJoinChannel(UUID channelId, UUID memberId);
+    List<Membership> addMemberToChannel(UUID channelId, List<UUID> userIds);
+    boolean leaveChannel(UUID userId, UUID channelId);
+    Membership setMemberRole(UUID userId, UUID channelId, Role role);
+    boolean deleteMember(UUID userId, UUID channelId);
 }

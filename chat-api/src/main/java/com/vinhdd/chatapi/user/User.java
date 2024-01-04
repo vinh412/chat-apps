@@ -1,7 +1,5 @@
 package com.vinhdd.chatapi.user;
 
-import com.vinhdd.chatapi.channel.Channel;
-import com.vinhdd.chatapi.channel.Membership;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,10 +18,11 @@ import java.util.*;
 @Table(name = "user")
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     private String firstname;
     private String lastname;
+    @Column(unique = true)
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)

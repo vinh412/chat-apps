@@ -5,11 +5,11 @@ services:
     image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: 123
-      MYSQL_DATABASE: chat_apps
+      MYSQL_DATABASE: chatapps
     ports:
       - "3306:3306"
-    volumes:
-      - ./data/chatapps_database.sql:/docker-entrypoint-initdb.d/chatapps_database.sql
+    # volumes:
+    #   - ./data/chatapps_database.sql:/docker-entrypoint-initdb.d/chatapps_database.sql
 
   cassandra:
     image: cassandra:latest

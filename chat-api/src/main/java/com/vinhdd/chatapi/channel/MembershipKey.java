@@ -5,7 +5,7 @@ import jakarta.persistence.Embeddable;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.Objects;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -15,8 +15,8 @@ import java.util.Objects;
 @Embeddable
 public class MembershipKey implements Serializable {
     @Column(name = "channel_id")
-    private Long channelId;
+    private UUID channelId;
 
     @Column(name = "user_id")
-    private Long userId;
+    private UUID userId;
 }

@@ -3,6 +3,8 @@ package com.vinhdd.chatapi.user;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @ToString
@@ -15,6 +17,6 @@ public class Friendship {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long userId;
-    private Long friendId;
+    private UUID userId;
+    private UUID friendId;
 }

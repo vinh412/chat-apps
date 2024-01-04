@@ -2,6 +2,8 @@ package com.vinhdd.chatapi.message;
 
 import lombok.*;
 
+import java.util.UUID;
+
 @ToString
 @Getter
 @Setter
@@ -9,6 +11,6 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class MessageKey {
-    private Long channelId;
-    private Long messageId;
+    private UUID channelId;
+    private UUID messageId;
 }

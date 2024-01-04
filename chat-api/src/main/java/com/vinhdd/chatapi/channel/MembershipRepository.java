@@ -9,8 +9,8 @@ import java.util.UUID;
 
 public interface MembershipRepository extends JpaRepository<Membership, MembershipKey> {
     @Query(value = "SELECT * FROM membership WHERE channel_id = ?1 AND status = 'ACCEPTED' ", nativeQuery = true)
-    Optional<List<Membership>> findAllMembersByChannelId(Long channelId);
+    Optional<List<Membership>> findAllMembersByChannelId(UUID channelId);
     @Query(value = "SELECT * FROM membership WHERE channel_id = ?1 AND status = 'PENDING' ", nativeQuery = true)
-    Optional<List<Membership>> findAllRequestsByChannelId(Long channelId);
-    Optional<List<Membership>> findAllByUserId(Long userId);
+    Optional<List<Membership>> findAllRequestsByChannelId(UUID channelId);
+    Optional<List<Membership>> findAllByUserId(UUID userId);
 }

@@ -1,9 +1,7 @@
 package com.vinhdd.chatapi.channel;
 
-import com.vinhdd.chatapi.channel.response.ChannelResponse;
-import com.vinhdd.chatapi.channel.response.MemberResponse;
-import com.vinhdd.chatapi.channel.response.MessageResponse;
-import com.vinhdd.chatapi.config.JwtService;
+import com.vinhdd.chatapi.response.ChannelResponse;
+import com.vinhdd.chatapi.response.MemberResponse;
 import com.vinhdd.chatapi.message.MessageService;
 import com.vinhdd.chatapi.user.User;
 import com.vinhdd.chatapi.user.UserRepository;
@@ -14,8 +12,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -87,7 +85,7 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public List<MemberResponse> getAllMembersOfChannel(Long channelId) {
+    public List<MemberResponse> getAllMembersOfChannel(UUID channelId) {
         List<MemberResponse> result = new ArrayList<>();
         List<Membership> membershipList = membershipRepository.findAllMembersByChannelId(channelId).orElseThrow();
         for(Membership membership : membershipList){
@@ -105,12 +103,12 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public List<Membership> getAllRequestsOfChannel(Long channelId){
+    public List<Membership> getAllRequestsOfChannel(UUID channelId){
         return membershipRepository.findAllRequestsByChannelId(channelId).orElseThrow();
     }
 
     @Override
-    public Membership requestJoinChannel(Long channelId) {
+    public Membership requestJoinChannel(UUID channelId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Channel channel = channelRepository.findById(channelId).orElseThrow();
 
@@ -130,7 +128,7 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public Membership acceptJoinChannel(Long channelId, Long memberId) {
+    public Membership acceptJoinChannel(UUID channelId, UUID memberId) {
         User admin = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Membership adminMembership = membershipRepository.findById(new MembershipKey(channelId, admin.getId())).orElseThrow();
         Membership membership = membershipRepository.findById(new MembershipKey(channelId, memberId)).orElseThrow();
@@ -143,7 +141,7 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public Membership declineJoinChannel(Long channelId, Long memberId){
+    public Membership declineJoinChannel(UUID channelId, UUID memberId){
         User admin = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Membership adminMembership = membershipRepository.findById(new MembershipKey(channelId, admin.getId())).orElseThrow();
         Membership membership = membershipRepository.findById(new MembershipKey(channelId, memberId)).orElseThrow();
@@ -155,22 +153,38 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public Membership addMember(Long userId, Long channelId) {
-        return null;
+    public List<Membership> addMemberToChannel(UUID channelId, List<UUID> userIds) {
+        User admin = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Channel channel = channelRepository.findById(channelId).orElseThrow();
+        Membership adminMembership = membershipRepository.findById(new MembershipKey(channelId, admin.getId())).orElseThrow();
+        if(adminMembership.getRole() != Role.ADMIN){
+            return null;
+        }
+        return userIds.stream().map(userId -> {
+            User user = userRepository.findById(userId).orElseThrow();
+            return membershipRepository.save(Membership.builder()
+                        .id(new MembershipKey(channelId, userId))
+                        .channel(channel)
+                        .user(user)
+                        .joiningDate(LocalDateTime.now())
+                        .role(Role.USER)
+                        .status(Status.ACCEPTED)
+                .build());
+        }).collect(Collectors.toList());
     }
 
     @Override
-    public boolean leaveChannel(Long userId, Long channelId) {
+    public boolean leaveChannel(UUID userId, UUID channelId) {
         return false;
     }
 
     @Override
-    public Membership setMemberRole(Long userId, Long channelId, Role role) {
+    public Membership setMemberRole(UUID userId, UUID channelId, Role role) {
         return null;
     }
 
     @Override
-    public boolean deleteMember(Long userId, Long channelId) {
+    public boolean deleteMember(UUID userId, UUID channelId) {
         return false;
     }
 

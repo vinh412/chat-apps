@@ -2,6 +2,7 @@
 
 # ui - Reactjs
 ui/node_modules
+ui/.env
 
 # chat-api - Spring Boot
 chat-api/HELP.md

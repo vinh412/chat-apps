@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,7 +16,7 @@ import java.util.List;
 public class ApiController {
     final private ChannelMessageService channelMessageService;
     @GetMapping("/{channelId}")
-    public ResponseEntity<List<ChannelMessage>> getAllMessagesOfChannel(@PathVariable Long channelId){
+    public ResponseEntity<List<ChannelMessage>> getAllMessagesOfChannel(@PathVariable UUID channelId){
         return ResponseEntity.ok(channelMessageService.getAllMessagesOfChannel(channelId));
     }
 }

@@ -1,2 +1,6 @@
-package com.vinhdd.chatserver.message;public enum UserMessageType {
+package com.vinhdd.chatserver.message;
+
+public enum UserMessageType {
+    CHAT,
+    NOTICE
 }

@@ -7,6 +7,7 @@ import org.springframework.data.cassandra.core.mapping.PrimaryKeyClass;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @ToString
 @Getter
@@ -17,7 +18,7 @@ import java.io.Serializable;
 @PrimaryKeyClass
 public class ChannelMessageKey implements Serializable {
     @PrimaryKeyColumn(name = "channel_id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
-    private Long channelId;
+    private UUID channelId;
     @PrimaryKeyColumn(name = "message_id", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
-    private Long messageId;
+    private UUID messageId;
 }
