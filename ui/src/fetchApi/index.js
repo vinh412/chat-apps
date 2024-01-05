@@ -43,7 +43,6 @@ const client = {
   },
 
   getAllChannelsOfUser: (jwt) => {
-    console.log(url);
     return fetch(`${url}/api/v1/channel/allOfUser`, {
       method: "GET",
       headers: {

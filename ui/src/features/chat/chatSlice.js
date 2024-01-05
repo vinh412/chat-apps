@@ -54,6 +54,7 @@ export const chatSlice = createSlice({
     receiveMessage: (state, action) => {
       const message = action.payload;
       if (message.type === "JOIN") {
+        stompClient.deactivate();
         state.status = "idle";
       } else {
         const channel = state.channels.find(

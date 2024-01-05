@@ -39,7 +39,7 @@ function ContactDrawer() {
         console.log("Đã kết nối");
         stompClient.subscribe(`/user/${userId}`, onReceivedMessage)
         channels.forEach((channel) => {
-          console.log("kết nối tới channel", channel.id);
+          console.log("kết nối tới channel", channel.name);
           stompClient.subscribe(`/channel/${channel.id}`, onReceivedMessage);
         });
       };
