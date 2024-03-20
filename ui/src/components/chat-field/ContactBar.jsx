@@ -3,6 +3,9 @@ import React from 'react'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import PhoneEnabledRoundedIcon from '@mui/icons-material/PhoneEnabledRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
+import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
+import { autoChat } from '../../ws-demo';
+import { useSelector } from 'react-redux';
 
 function ContactBar({contactName, onClick}) {
     return (
@@ -18,8 +21,8 @@ function ContactBar({contactName, onClick}) {
             </Box>
             <Box display='flex' flexDirection='row'>
                 <Box>
-                    <IconButton size='lg'>
-                        <SearchRoundedIcon />
+                    <IconButton size='lg' >
+                        <PlayArrowRoundedIcon />
                     </IconButton>
                 </Box>
                 <Box>

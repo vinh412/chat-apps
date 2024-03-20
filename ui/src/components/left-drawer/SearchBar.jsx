@@ -45,7 +45,7 @@ function SearchBar() {
           </Menu>
         </Dropdown>
       </Box>
-      <Box sx={{ p: "4px" }} width="-webkit-fill-available">
+      <Box sx={{ p: "4px" }} minWidth='200px'>
         <Input
           endDecorator={<SearchRoundedIcon />}
           sx={{ p: "8px" }}

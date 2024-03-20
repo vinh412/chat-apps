@@ -13,7 +13,7 @@ function DetailDrawer({ setOpen }) {
     >
       <DetailBar onClick={() => setOpen(false)} />
       <AspectRatio></AspectRatio>
-      <Box height="100%">
+      <Box height="100%" overflow="auto">
         <Tabs defaultValue={0}>
           <TabList>
             <Tab>Members</Tab>
@@ -21,7 +21,7 @@ function DetailDrawer({ setOpen }) {
             <Tab>Files</Tab>
             <Tab>Links</Tab>
           </TabList>
-          <TabPanel value={0} sx={{ p: "8px", height: "100%" }}>
+          <TabPanel value={0} sx={{ p: "8px", height: "100%"}}>
             <MembersTabPanel />
           </TabPanel>
           <TabPanel value={1}>

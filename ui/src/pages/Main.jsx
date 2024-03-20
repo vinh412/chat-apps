@@ -9,8 +9,8 @@ function Main() {
     <Box display="flex" flexDirection="row" height="100vh">
       <Box
         width="25%"
-        minWidth="384px"
         sx={{ borderRight: "1px solid gainsboro" }}
+        minWidth='300px'
       >
         <ContactDrawer />
       </Box>

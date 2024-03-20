@@ -26,7 +26,7 @@ function ChatField() {
         />
         <Box sx={{ overflow: "auto", height: "100%" }}>
           <Container maxWidth="md" sx={{ p: "8px" }}>
-            <Conversation messages={currentChat.messages} />
+            <Conversation messages={currentChat.messages} members={currentChat.members} />
           </Container>
         </Box>
         <Container maxWidth="md" sx={{ p: "8px" }}>
