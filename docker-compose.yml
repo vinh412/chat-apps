@@ -1,6 +1,28 @@
-version: '3'
-
 services:
+  chat-api:
+    build: ./chat-api
+    ports:
+      - "8081:8081"
+    networks:
+      - chatapps
+
+  chat-server:
+    build: ./chat-server
+    ports:
+      - "8080:8080"
+    networks:
+      - chatapps
+
+  ui:
+    build: ./ui
+    environment:
+      - REACT_APP_API_SERVER_URL=http://chat-api:8081
+      - REACT_APP_CHAT_SERVER_URL=http://chat-server:8080
+    ports:
+      - "80:80"
+    networks:
+      - chatapps
+
   mysql:
     image: mysql:latest
     environment:
@@ -8,6 +30,8 @@ services:
       MYSQL_DATABASE: chatapps
     ports:
       - "3306:3306"
+    networks:
+      - chatapps
     # volumes:
     #   - ./data/chatapps_database.sql:/docker-entrypoint-initdb.d/chatapps_database.sql
 
@@ -28,6 +52,8 @@ services:
       interval: 15s
       timeout: 10s
       retries: 10
+    networks:
+      - chatapps
 
   cassandra-load-keyspace:
     container_name: cassandra-load-keyspace
@@ -38,3 +64,5 @@ services:
     volumes:
       - ./data/data.cql:/data.cql
     command: /bin/bash -c "echo loading cassandra keyspace && cqlsh cassandra -f /data.cql"
+networks:
+  chatapps:

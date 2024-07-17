@@ -3,6 +3,8 @@
 # ui - Reactjs
 ui/node_modules
 ui/.env
+ui/build
+ui/package-lock.json
 
 # chat-api - Spring Boot
 chat-api/HELP.md
