@@ -1,6 +1,6 @@
 package com.vinhdd.chatapi.config;
 
-import com.vinhdd.chatapi.user.UserRepository;
+import com.vinhdd.chatapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

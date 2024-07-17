@@ -32,6 +32,7 @@ function Login() {
     const formData = {
       email: formElements.email.value,
       password: formElements.password.value,
+      rememberMe: formElements.rememberMe.checked
     };
 
     dispatch(fetchLogin(formData));
@@ -54,7 +55,7 @@ function Login() {
                 Log in to your account
               </Typography>
               <Typography level="body2" sx={{ my: 1, mb: 3 }}>
-                Welcome back!
+                Welcome to ChatApps!
               </Typography>
             </Box>
             <Box component="form" onSubmit={handleSubmit}>
@@ -90,7 +91,7 @@ function Login() {
                 <Checkbox
                   size="sm"
                   label="Remember for 30 days"
-                  name="persistent"
+                  name="rememberMe"
                 />
                 <Link fontSize="sm" href="#replace-with-a-link" fontWeight="lg">
                   Forgot your password?

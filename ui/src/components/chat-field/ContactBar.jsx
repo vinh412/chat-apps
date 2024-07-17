@@ -21,11 +21,6 @@ function ContactBar({contactName, onClick}) {
             </Box>
             <Box display='flex' flexDirection='row'>
                 <Box>
-                    <IconButton size='lg' >
-                        <PlayArrowRoundedIcon />
-                    </IconButton>
-                </Box>
-                <Box>
                     <IconButton size='lg'>
                         <PhoneEnabledRoundedIcon />
                     </IconButton>

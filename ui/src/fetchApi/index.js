@@ -1,4 +1,4 @@
-const url = process.env.REACT_APP_API_SERVER_URL;
+const url = process.env.REACT_APP_API_SERVER_URL || "http://localhost:8081";
 
 const client = {
   signup: (form) => {
