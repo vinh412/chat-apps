@@ -23,7 +23,7 @@ function ContactDrawer() {
   });
   const channelsStatus = useSelector((state) => state.chat.status);
   const error = useSelector((state) => state.chat.error);
-  const userId = useSelector(state => state.auth.user.id);
+  const userId = useSelector((state) => state.auth.user.id);
   const token = useSelector((state) => state.auth.user.token);
 
   const onReceivedMessage = (message) => {
@@ -37,7 +37,7 @@ function ContactDrawer() {
       stompClient.activate();
       stompClient.onConnect = () => {
         console.log("Đã kết nối");
-        stompClient.subscribe(`/user/${userId}`, onReceivedMessage)
+        stompClient.subscribe(`/user/${userId}`, onReceivedMessage);
         channels.forEach((channel) => {
           console.log("kết nối tới channel", channel.name);
           stompClient.subscribe(`/channel/${channel.id}`, onReceivedMessage);
