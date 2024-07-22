@@ -3,8 +3,8 @@ services:
   mysql:
     image: mysql:latest
     environment:
-      MYSQL_USER: ${MYSQL_USER:chatapps}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:my_secret}
+      MYSQL_USER: ${MYSQL_USER-chatapps}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD-my_secret}
       MYSQL_DATABASE: chatapps
     ports:
       - "3306:3306"
