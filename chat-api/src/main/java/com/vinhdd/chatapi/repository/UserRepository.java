@@ -18,4 +18,5 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Query(value = "SELECT * FROM user WHERE email LIKE %:email%", nativeQuery = true)
     List<User> findAllByContainEmail(@Param("email") String email);
     Boolean existsByEmail(@NotBlank String email);
+
 }

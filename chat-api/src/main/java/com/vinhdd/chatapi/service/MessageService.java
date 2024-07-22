@@ -14,7 +14,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MessageService {
     final private RestTemplate restTemplate;
-    private final String chatServerHostname = System.getenv("CHAT_SERVER_HOSTNAME")==null?"localhost":System.getenv("CHAT_SERVER_HOSTNAME");
+    private final String chatServerHostname = System.getenv("CHAT_SERVER_HOST")==null?"localhost":System.getenv("CHAT_SERVER_HOST");
     private final int chatServerPort = Integer.parseInt(System.getenv("CHAT_SERVER_PORT")==null?"8080":System.getenv("CHAT_SERVER_PORT"));
 
     public List<MessageResponse> fetchAllMessagesOfChannel(UUID channelId){

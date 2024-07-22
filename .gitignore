@@ -1,8 +1,11 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
+.env
+data
+compose.prod.yml
 # ui - Reactjs
 ui/node_modules
 ui/.env
+ui/.env.production
 ui/build
 ui/package-lock.json
 
