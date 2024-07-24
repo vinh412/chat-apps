@@ -26,7 +26,7 @@ node {
     }
     stage('Deploy to production'){
         def deploying = "#!/bin/bash\n" +
-            "cd /ChatApps\n" +
+            "cd /chatapps\n" +
             "docker compose pull\n" +
             "docker compose up > nohup.out 2>&1 &"
 
