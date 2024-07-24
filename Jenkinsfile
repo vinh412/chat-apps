@@ -18,8 +18,11 @@ node {
     stage('Build and Packaging') {
         sh(script: """docker compose -f compose.prod.yml build""", label: "build docker image")
     }
-    stage('Push to Docker hub') {
-        sh(script: """docker compose -f compose.prod.yml push""", label: "push docker image")
+    stage('Push to Docker Hub') {
+        withCredentials([usernamePassword(credentialsId: DOCKERHUB_CREDENTIALS_ID, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
+            sh(script: """echo $PASSWORD | docker login -u $USERNAME --password-stdin""", label: "login to docker hub")
+            sh(script: """docker compose -f compose.prod.yml push""", label: "push docker image")
+        }
     }
     stage('Deploy to production'){
         def deploying = "#!/bin/bash\n" +
