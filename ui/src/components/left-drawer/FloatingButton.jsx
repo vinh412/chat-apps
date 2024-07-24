@@ -5,11 +5,24 @@ import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import GroupRoundedIcon from "@mui/icons-material/GroupRounded";
 import MessageRoundedIcon from "@mui/icons-material/MessageRounded";
+import CreateChannel from "./CreateChannel";
 
-function FloatingButton({ setOpenCreateChannel }) {
+function FloatingButton({ setOpenCreateChannel, setDrawerTitle, setDrawer }) {
   const actions = [
-    { icon: <GroupRoundedIcon />, name: "New Channel", handleClick: () => {setOpenCreateChannel(true)} },
-    { icon: <MessageRoundedIcon />, name: "New Message", handleClick: () => {} },
+    {
+      icon: <GroupRoundedIcon />,
+      name: "New Channel",
+      handleClick: () => {
+        setOpenCreateChannel(true);
+        setDrawerTitle("Create new Channel")
+        setDrawer(<CreateChannel setOpen={setOpenCreateChannel} />);
+      },
+    },
+    {
+      icon: <MessageRoundedIcon />,
+      name: "New Message",
+      handleClick: () => {},
+    },
   ];
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);

@@ -1,4 +1,4 @@
-package com.vinhdd.chatserver.message;
+package com.vinhdd.chatserver.model;
 
 public enum MessageType {
     CHAT,

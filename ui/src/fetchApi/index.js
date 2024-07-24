@@ -22,7 +22,7 @@ const client = {
   },
 
   authenticate: (jwt) => {
-    return fetch(`${url}/api/v1/auth/authenticate`, {
+    return fetch(`${url}/api/v1/auth/me`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
@@ -31,7 +31,7 @@ const client = {
   },
 
   createChannel: (channelName, jwt) => {
-    return fetch(`${url}/api/v1/channel/create`, {
+    return fetch(`${url}/api/v1/channels`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -43,7 +43,7 @@ const client = {
   },
 
   getAllChannelsOfUser: (jwt) => {
-    return fetch(`${url}/api/v1/channel/allOfUser`, {
+    return fetch(`${url}/api/v1/channels`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${jwt}`,
@@ -53,7 +53,7 @@ const client = {
   },
 
   getAllMembersOfChannel: (channelId, jwt) => {
-    return fetch(`${url}/api/v1/channel/${channelId}/members`, {
+    return fetch(`${url}/api/v1/channels/${channelId}/members`, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + jwt,
@@ -63,7 +63,7 @@ const client = {
   },
 
   findUsersByEmail: (email, jwt) => {
-    return fetch(`${url}/api/v1/users/q=${email}`, {
+    return fetch(`${url}/api/v1/users?q=${email}`, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + jwt,
@@ -73,7 +73,7 @@ const client = {
   },
 
   addMembersToChannel: (jwt, channelId, userIdList) => {
-    return fetch(`${url}/api/v1/channel/${channelId}/add`, {
+    return fetch(`${url}/api/v1/channels/${channelId}/members`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",

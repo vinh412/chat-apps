@@ -1,6 +1,10 @@
-package com.vinhdd.chatserver.message;
+package com.vinhdd.chatserver.controller;
 
 import com.datastax.oss.driver.api.core.uuid.Uuids;
+import com.vinhdd.chatserver.model.ChannelMessage;
+import com.vinhdd.chatserver.repository.ChannelMessageRepository;
+import com.vinhdd.chatserver.service.ChannelMessageService;
+import com.vinhdd.chatserver.model.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -9,7 +13,6 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 

@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
+    private final int JWT_EXPIRATION_TIME = 1000 * 60 * 60 * 24; // 1 day
+    private final int JWT_EXPIRATION_TIME_REMEMBER_ME = 1000 * 60 * 60 * 24 * 3; // 3 day
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -39,7 +41,7 @@ public class AuthenticationService {
                 .role(Role.USER)
                 .build();
         repository.save(user);
-        var jwtToken = jwtService.generateToken(user, 1000 * 3 * 60);
+        var jwtToken = jwtService.generateToken(user, JWT_EXPIRATION_TIME);
         return AuthenticationResponse.builder()
                 .id(user.getId())
                 .firstname(user.getFirstname())
@@ -58,9 +60,9 @@ public class AuthenticationService {
                 )
         );
         var user = repository.findByEmail(request.getEmail()).orElseThrow();
-        int timeToLive = 1000 * 3 * 60;
+        int timeToLive = JWT_EXPIRATION_TIME;
         if(request.isRememberMe()){
-            timeToLive = 1000 * 24 * 60 * 60;
+            timeToLive = JWT_EXPIRATION_TIME_REMEMBER_ME;
         }
         var jwtToken = jwtService.generateToken(user, timeToLive);
         return AuthenticationResponse.builder()
@@ -68,6 +70,7 @@ public class AuthenticationService {
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
                 .email(user.getEmail())
+                .username(user.getUsername())
                 .role(user.getRole())
                 .token(jwtToken)
                 .build();
@@ -75,10 +78,11 @@ public class AuthenticationService {
 
     public AuthenticationResponse authenticate() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String jwt = jwtService.generateToken(user, 1000 * 2 * 60);
+        String jwt = jwtService.generateToken(user, JWT_EXPIRATION_TIME);
         return AuthenticationResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
+                .username(user.getUsername())
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
                 .role(user.getRole())

@@ -4,6 +4,7 @@ import com.vinhdd.chatapi.payload.response.AuthenticationResponse;
 import com.vinhdd.chatapi.service.AuthenticationService;
 import com.vinhdd.chatapi.payload.request.LoginRequest;
 import com.vinhdd.chatapi.payload.request.RegisterRequest;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,8 @@ public class AuthenticationController {
         return ResponseEntity.ok(service.login(request));
     }
 
-    @GetMapping("/authenticate")
+    @SecurityRequirement(name = "Authorization")
+    @GetMapping("/me")
     public ResponseEntity<AuthenticationResponse> authenticate() {
         return ResponseEntity.ok(service.authenticate());
     }

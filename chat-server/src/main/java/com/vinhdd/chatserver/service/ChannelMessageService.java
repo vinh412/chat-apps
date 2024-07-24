@@ -1,5 +1,7 @@
-package com.vinhdd.chatserver.message;
+package com.vinhdd.chatserver.service;
 
+import com.vinhdd.chatserver.model.ChannelMessage;
+import com.vinhdd.chatserver.repository.ChannelMessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

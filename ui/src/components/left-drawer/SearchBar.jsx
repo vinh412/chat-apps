@@ -16,8 +16,9 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import { logout } from "../../features/auth/authSlice";
 import { useDispatch } from "react-redux";
 import Bar from "../common/Bar";
+import Profile from "./Profile";
 
-function SearchBar() {
+function SearchBar({ setOpenDrawer, setDrawerTitle, setDrawer }) {
   const dispatch = useDispatch();
   return (
     <Bar>
@@ -30,7 +31,13 @@ function SearchBar() {
             <MenuRoundedIcon />
           </MenuButton>
           <Menu placement="bottom-start">
-            <MenuItem>
+            <MenuItem
+              onClick={() => {
+                setOpenDrawer(true);
+                setDrawerTitle("My Profile")
+                setDrawer(<Profile />);
+              }}
+            >
               <ListItemDecorator>
                 <AccountCircleRoundedIcon />
               </ListItemDecorator>
@@ -45,7 +52,7 @@ function SearchBar() {
           </Menu>
         </Dropdown>
       </Box>
-      <Box sx={{ p: "4px" }} minWidth='200px'>
+      <Box sx={{ p: "4px" }} minWidth="200px">
         <Input
           endDecorator={<SearchRoundedIcon />}
           sx={{ p: "8px" }}

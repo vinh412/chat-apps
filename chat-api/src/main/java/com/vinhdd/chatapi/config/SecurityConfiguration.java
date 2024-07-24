@@ -18,15 +18,16 @@ public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final CorsFilter corsFilter;
     private final AuthenticationProvider authenticationProvider;
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeHttpRequest ->
-                    authorizeHttpRequest.requestMatchers("/api/v1/auth/**", "/api/v1/docs/**")
-                            .permitAll()
-                            .anyRequest() // "/api/v1/channel/**", "/api/v1/users/**"
-                            .authenticated()
+                        authorizeHttpRequest.requestMatchers("/api/v1/auth/register", "/api/v1/auth/login", "/api/v1/docs/**")
+                                .permitAll()
+                                .anyRequest() // "/api/v1/channel/**", "/api/v1/users/**"
+                                .authenticated()
                 )
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

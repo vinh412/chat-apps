@@ -4,25 +4,30 @@ import { Box, IconButton, Input } from "@mui/joy";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { Slide } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCreateChannel, receiveMessage, setCurrentChatId } from "../../features/chat/chatSlice";
+import {
+  fetchCreateChannel,
+  receiveMessage,
+  setCurrentChatId,
+} from "../../features/chat/chatSlice";
 import { stompClient } from "../../ws";
 
-function CreateChannel({ setOpenCreateChannel }) {
+function CreateChannel({ setOpen }) {
   const dispatch = useDispatch();
   const [channelName, setChannelName] = React.useState("");
-  const token = useSelector(state => state.auth.user.token);
-  const userId = useSelector(state => state.auth.user.id);
-  const userFirtsname = useSelector(state => state.auth.user.firstname);
-  const [createChannelStatus, setCreateChannelStatus] = React.useState('idle');
+  const token = useSelector((state) => state.auth.user.token);
+  const userId = useSelector((state) => state.auth.user.id);
+  const userFirtsname = useSelector((state) => state.auth.user.firstname);
+  const [createChannelStatus, setCreateChannelStatus] = React.useState("idle");
 
-  const canCreate = channelName && createChannelStatus === 'idle';
+  const canCreate = channelName && createChannelStatus === "idle";
 
   const handleCreateChannel = async () => {
-
-    if(canCreate){
-      try{
-        setCreateChannelStatus('pending');
-        const newChannel = await dispatch(fetchCreateChannel({channelName, jwt: token})).unwrap();
+    if (canCreate) {
+      try {
+        setCreateChannelStatus("pending");
+        const newChannel = await dispatch(
+          fetchCreateChannel({ channelName, jwt: token })
+        ).unwrap();
 
         stompClient.subscribe(`/channel/${newChannel.id}`, (message) => {
           dispatch(receiveMessage(JSON.parse(message.body)));
@@ -41,11 +46,11 @@ function CreateChannel({ setOpenCreateChannel }) {
 
         dispatch(setCurrentChatId(newChannel.id));
 
-        setOpenCreateChannel(false);
-      }catch(err){
-        console.log('Failed to create channel: ', err);
-      }finally{
-        setCreateChannelStatus('idle');
+        setOpen(false);
+      } catch (err) {
+        console.log("Failed to create channel: ", err);
+      } finally {
+        setCreateChannelStatus("idle");
       }
     }
   };
@@ -63,42 +68,32 @@ function CreateChannel({ setOpenCreateChannel }) {
   );
   return (
     <Box
+      height="100%"
       display="flex"
       flexDirection="column"
-      sx={{ height: "100%" }}
+      justifyContent="space-between"
+      mt="32px"
     >
-      <BackBar
-        title="New Channel"
-        handleBack={() => setOpenCreateChannel(false)}
-      />
       <Box
-        height="100%"
-        display="flex"
-        flexDirection="column"
-        justifyContent="space-between"
-        mt="32px"
+        sx={{
+          p: "8px",
+        }}
       >
-        <Box
-          sx={{
-            p: "8px",
-          }}
+        <Input
+          placeholder="Channel name"
+          size="lg"
+          onChange={(event) => setChannelName(event.target.value)}
+        />
+      </Box>
+      <Box alignSelf="end" p="16px">
+        <Slide
+          direction="up"
+          in={channelName.length > 0}
+          mountOnEnter
+          unmountOnExit
         >
-          <Input
-            placeholder="Channel name"
-            size="lg"
-            onChange={(event) => setChannelName(event.target.value)}
-          />
-        </Box>
-        <Box alignSelf="end" p="16px">
-          <Slide
-            direction="up"
-            in={channelName.length > 0}
-            mountOnEnter
-            unmountOnExit
-          >
-            {continueButton}
-          </Slide>
-        </Box>
+          {continueButton}
+        </Slide>
       </Box>
     </Box>
   );

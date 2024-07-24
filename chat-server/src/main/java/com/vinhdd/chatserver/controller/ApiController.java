@@ -1,5 +1,7 @@
-package com.vinhdd.chatserver.message;
+package com.vinhdd.chatserver.controller;
 
+import com.vinhdd.chatserver.model.ChannelMessage;
+import com.vinhdd.chatserver.service.ChannelMessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

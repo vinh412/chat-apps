@@ -1,8 +1,6 @@
 package com.vinhdd.chatapi.model.user;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,11 +20,12 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
     private String firstname;
     private String lastname;
     @Column(unique = true)
     private String email;
+    @Column(unique = true)
+    private String username;
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -38,7 +37,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override

@@ -1,14 +1,14 @@
-import { Box, Typography } from "@mui/joy";
-import React from "react";
+import { Typography } from "@mui/joy";
+import * as React from "react";
 import SearchBar from "./SearchBar";
 import ContactItem from "./ContactItem";
-import { Slide } from "@mui/material";
-import CreateChannel from "./CreateChannel";
+import { Box } from "@mui/material";
 import FloatingButton from "./FloatingButton";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchChannels, receiveMessage } from "../../features/chat/chatSlice";
 import ContactItemLoading from "../loading/ContactItemLoading";
 import { stompClient } from "../../ws";
+import MyDrawer from "./MyDrawer";
 
 function ContactDrawer() {
   const dispatch = useDispatch();
@@ -25,7 +25,9 @@ function ContactDrawer() {
   const error = useSelector((state) => state.chat.error);
   const userId = useSelector((state) => state.auth.user.id);
   const token = useSelector((state) => state.auth.user.token);
-
+  const [openDrawer, setOpenDrawer] = React.useState(false);
+  const [drawer, setDrawer] = React.useState();
+  const [drawerTitle, setDrawerTitle] = React.useState();
   const onReceivedMessage = (message) => {
     dispatch(receiveMessage(JSON.parse(message.body)));
   };
@@ -59,20 +61,6 @@ function ContactDrawer() {
     content = <Typography>{error}</Typography>;
   }
 
-  const [openCreateChannel, setOpenCreateChannel] = React.useState(false);
-  const createChannel = (
-    <Box
-      position="absolute"
-      left={0}
-      top={0}
-      width="100%"
-      height="100%"
-      bgcolor="white"
-      zIndex={1050}
-    >
-      <CreateChannel setOpenCreateChannel={setOpenCreateChannel} />
-    </Box>
-  );
   return (
     <Box
       display="flex"
@@ -80,7 +68,7 @@ function ContactDrawer() {
       sx={{ height: "100%" }}
       position="relative"
     >
-      <SearchBar />
+      <SearchBar setOpenDrawer={setOpenDrawer} setDrawerTitle={setDrawerTitle} setDrawer={setDrawer}/>
       <Box
         p="8px"
         sx={{
@@ -90,15 +78,12 @@ function ContactDrawer() {
       >
         {content}
       </Box>
-      <FloatingButton setOpenCreateChannel={setOpenCreateChannel} />
-      <Slide
-        direction="right"
-        in={openCreateChannel}
-        mountOnEnter
-        unmountOnExit
-      >
-        {createChannel}
-      </Slide>
+      <FloatingButton setOpenCreateChannel={setOpenDrawer} setDrawerTitle={setDrawerTitle} setDrawer={setDrawer} />
+      {openDrawer && (
+        <MyDrawer title={drawerTitle} setOpen={setOpenDrawer}>
+          {drawer}
+        </MyDrawer>
+      )}
     </Box>
   );
 }

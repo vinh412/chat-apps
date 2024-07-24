@@ -1,7 +1,8 @@
-package com.vinhdd.chatserver.message;
+package com.vinhdd.chatserver.repository;
 
+import com.vinhdd.chatserver.model.ChannelMessageKey;
+import com.vinhdd.chatserver.model.ChannelMessage;
 import org.springframework.data.cassandra.repository.CassandraRepository;
-import org.springframework.data.cassandra.repository.Query;
 
 import java.util.List;
 import java.util.UUID;

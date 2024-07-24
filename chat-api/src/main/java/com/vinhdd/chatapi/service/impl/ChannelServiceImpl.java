@@ -1,11 +1,13 @@
 package com.vinhdd.chatapi.service.impl;
 
+import com.vinhdd.chatapi.exception.BadRequestException;
 import com.vinhdd.chatapi.model.*;
 import com.vinhdd.chatapi.model.membership.Membership;
 import com.vinhdd.chatapi.model.membership.MembershipKey;
 import com.vinhdd.chatapi.model.membership.Role;
 import com.vinhdd.chatapi.model.membership.Status;
 import com.vinhdd.chatapi.model.user.User;
+import com.vinhdd.chatapi.payload.response.ApiResponse;
 import com.vinhdd.chatapi.repository.ChannelRepository;
 import com.vinhdd.chatapi.repository.MembershipRepository;
 import com.vinhdd.chatapi.payload.response.ChannelResponse;
@@ -40,10 +42,11 @@ public class ChannelServiceImpl implements ChannelService {
         );
     }
     @Override
-    public List<ChannelResponse> getAllChannelsOfUser(){
+    public List<ChannelResponse> getAllChannelsOfUser(UUID userId){
         List<ChannelResponse> result = new ArrayList<>();
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<Membership> membershipList = membershipRepository.findAllByUserId(user.getId()).orElseThrow();
+        List<Membership> membershipList = membershipRepository
+                .findAllByUserId(userId)
+                .orElseThrow(() -> new BadRequestException(new ApiResponse(false, "user not found")));
         for(Membership membership : membershipList){
             result.add(ChannelResponse.builder()
                             .id(membership.getChannel().getId())
@@ -54,6 +57,21 @@ public class ChannelServiceImpl implements ChannelService {
                     .build());
         }
         return result;
+    }
+
+    @Override
+    public ChannelResponse getChannelById(UUID channelId) {
+        return null;
+    }
+
+    @Override
+    public ChannelResponse updateChannel(UUID channelId, Channel channel) {
+        return null;
+    }
+
+    @Override
+    public boolean deleteChannel(UUID channelId) {
+        return false;
     }
 
     @Override

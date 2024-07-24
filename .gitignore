@@ -52,3 +52,5 @@ chat-server/.idea
 chat-server/*.iws
 chat-server/*.iml
 chat-server/*.ipr
+
+storage-server

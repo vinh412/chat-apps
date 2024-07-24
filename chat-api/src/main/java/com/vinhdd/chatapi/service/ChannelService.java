@@ -2,6 +2,7 @@ package com.vinhdd.chatapi.service;
 import com.vinhdd.chatapi.model.membership.Membership;
 import com.vinhdd.chatapi.model.membership.Role;
 import com.vinhdd.chatapi.model.Channel;
+import com.vinhdd.chatapi.payload.response.ApiResponse;
 import com.vinhdd.chatapi.payload.response.ChannelResponse;
 import com.vinhdd.chatapi.payload.response.MemberResponse;
 
@@ -11,7 +12,10 @@ import java.util.UUID;
 public interface ChannelService {
 //    List<Membership> getAllChannelsOfUser(String username);
     ChannelResponse createChannel(Channel channel);
-    List<ChannelResponse> getAllChannelsOfUser();
+    List<ChannelResponse> getAllChannelsOfUser(UUID userId);
+    ChannelResponse getChannelById(UUID channelId);
+    ChannelResponse updateChannel(UUID channelId, Channel channel);
+    boolean deleteChannel(UUID channelId);
     List<MemberResponse> getAllMembersOfChannel(UUID channelId);
     List<Membership> getAllRequestsOfChannel(UUID channelId);
     Membership requestJoinChannel(UUID channelId);

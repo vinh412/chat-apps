@@ -1,5 +1,6 @@
 package com.vinhdd.chatapi.config;
 
+import com.vinhdd.chatapi.model.user.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -28,26 +29,26 @@ public class JwtService {
     }
     public String generateToken(
             Map<String, Object> extraClaims,
-            UserDetails userDetails,
+            User user,
             int timeToLive
     ){
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(user.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + timeToLive))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String generateToken(UserDetails userDetails, int timeToLive){
-        return generateToken(new HashMap<>(), userDetails, timeToLive);
+    public String generateToken(User user, int timeToLive){
+        return generateToken(new HashMap<>(), user, timeToLive);
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails){
+    public boolean isTokenValid(String token, User user){
         String username = extractUsername(token);
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+        return username.equals(user.getEmail()) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {

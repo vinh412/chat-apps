@@ -1,7 +1,7 @@
 package com.vinhdd.chatserver.config;
 
-import com.vinhdd.chatserver.message.ChatMessage;
-import com.vinhdd.chatserver.message.MessageType;
+import com.vinhdd.chatserver.model.ChatMessage;
+import com.vinhdd.chatserver.model.MessageType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
