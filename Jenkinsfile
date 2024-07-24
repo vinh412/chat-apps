@@ -32,9 +32,6 @@ node {
 
         sshagent(credentials: [SSH_CREDENTIALS_ID]){
             sh("""
-                scp -o StrictHostKeyChecking=no -r $WORKSPACE/compose.prod.yml root@$PROD_SERVER:/chatapps
-            """)
-            sh("""
                 ssh -o StrictHostKeyChecking=no root@$PROD_SERVER "echo \\\"${deploying}\\\" > deploy.sh && chmod +x deploy.sh && ./deploy.sh"
             """)
         }
