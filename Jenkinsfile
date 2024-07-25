@@ -27,8 +27,8 @@ node {
     stage('Deploy to production'){
         def deploying = "#!/bin/bash\n" +
             "cd /chatapps\n" +
-            "docker compose pull\n" +
-            "docker compose up > nohup.out 2>&1 &"
+            "docker compose -f compose.prod.yml pull\n" +
+            "docker compose -f compose.prod.yml up > nohup.out 2>&1 &"
 
         sshagent(credentials: [SSH_CREDENTIALS_ID]){
             sh("""
